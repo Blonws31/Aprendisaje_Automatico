@@ -31,7 +31,6 @@ import ch.idsia.agents.Agent;
 //import ch.idsia.benchmark.mario.engine.sprites.Mario;
 import ch.idsia.benchmark.mario.environments.Environment;
 
-
 import java.io.*;
 import java.util.Random;
 import java.io.IOException;
@@ -42,9 +41,16 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
     private Random R = null;
     
     static BufferedWriter fichero = null;   
-	String [] auxString = new String[5];
+	String [] auxString = new String[25];
+	String [] coin_bricks = new String[25];
+
 	boolean Salto = false;
 	int aux_salto = 0;
+	
+	String miString = null;
+	String escritura_final = null;
+	StringBuffer aux_sb = new StringBuffer();
+	StringBuffer sb = new StringBuffer();
 	
     public T3BotAgent() {
         super("BaselineAgent");
@@ -71,9 +77,8 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
     
     public void integrateObservation(Environment environment) {	
     	Salto = false;
-    	String miString = null;
-    	StringBuffer aux_sb = new StringBuffer();
-    	StringBuffer sb = new StringBuffer();
+    	aux_sb = new StringBuffer();
+    	sb = new StringBuffer();
         // IMPORTANTE: Si se utilizan métodos que tardan mucho como println, cada tick puede tardar en procesarse más de
         // de lo que permite la competición de Mario AI. Si el agente es demasiado lento procesando y el simulador no
         // puede funcionar en tiempo real, se cerrará automáticamente, lor lo que se insta a que el código escrito sea
@@ -127,11 +132,24 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
         System.out.println("\nMERGE:");
         byte [][] env;
         env = environment.getMergedObservationZZ(1, 1);
+        int coins = 0;
+        int bricks = 0;
+        int enemys = 0;
         for (int mx = 0; mx < env.length; mx++) {
            //System.out.print(mx + ": [");
             for (int my = 0; my < env[mx].length; my++) {
                 //System.out.print(env[mx][my] + " ");
             	miString = sb.append(String.valueOf(env[mx][my])+", ").toString();
+            	if(env[mx][my] == 2) {
+            		coins++;
+            	}
+            	else if(env[mx][my] == -24) {
+            		bricks++;
+            	}
+            	else if(env[mx][my] == 80) {
+            		enemys++;
+            	}
+            	
             }
             //System.out.println("]");
         }
@@ -151,14 +169,14 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
         }
         
         // Posicion que ocupa Mario en el array anterior
-        System.out.println("\nPOSICION MARIO MATRIZ");
+       /* System.out.println("\nPOSICION MARIO MATRIZ");
         int[] posMarioEgo;
         posMarioEgo = environment.getMarioEgoPos();
         for (int mx = 0; mx < posMarioEgo.length; mx++) {
         	System.out.print(posMarioEgo[mx] + " ");
         	//escribir(String.valueOf(posMarioEgo[mx]+", "));
         	miString = sb.append(String.valueOf(posMarioEgo[mx]+", ")).toString();
-        }
+        }*/
             
         // Estado de mario
         // marioStatus, marioMode, isMarioOnGround (1 o 0), isMarioAbleToJump() (1 o 0), isMarioAbleToShoot (1 o 0), 
@@ -172,8 +190,6 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
         	miString = sb.append(String.valueOf(marioState[mx]+", ")).toString(); 
         }
              
-        
-
         // Mas informacion de evaluacion...
         // distancePassedCells, distancePassedPhys, flowersDevoured, killsByFire, killsByShell, killsByStomp, killsTotal, marioMode,
         // marioStatus, mushroomsDevoured, coinsGained, timeLeft, timeSpent, hiddenBlocksFound
@@ -182,32 +198,62 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
         infoEvaluacion = environment.getEvaluationInfoAsInts();
         for (int mx = 0; mx < infoEvaluacion.length; mx++){
         	System.out.print(infoEvaluacion[mx] + " ");
-        	//escribir(String.valueOf(infoEvaluacion[mx]+", "));
         	miString = sb.append(String.valueOf(infoEvaluacion[mx]+", ")).toString();
         }
-        if(tick >= 5) {
-    		miString = sb.append(auxString[tick%5]+", ").toString();
-        	auxString[tick%5] = aux_sb.append(String.valueOf(infoEvaluacion[10]+", ")).append(String.valueOf(infoEvaluacion[6])).toString();
-        }
-    	else {
-        	auxString[tick] = aux_sb.append(String.valueOf(infoEvaluacion[10]+", ")).append(String.valueOf(infoEvaluacion[6])).toString();
-    	}
+        
         // Informacion del refuerzo/puntuacion que ha obtenido Mario. Nos puede servir para determinar lo bien o mal que lo esta haciendo.
         // Por defecto este valor engloba: reward for coins, killed creatures, cleared dead-ends, bypassed gaps, hidden blocks found
         System.out.println("\nREFUERZO");
         int reward = environment.getIntermediateReward();
         System.out.print(reward);
-        miString = sb.append(String.valueOf(reward+"\n")).toString();
-    	try {
-			fichero.write(miString);
-			fichero.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        miString = sb.append(String.valueOf(reward+", ")).toString();
+        miString = sb.append(String.valueOf(coins+", "+bricks+", "+enemys+", ")).toString(); 
+        
+        if(tick >= 25) {
+        	escritura_final = auxString[tick%25];
+        	auxString[tick%25] = miString;
+        	
+        	getAction();
+            for (int i = 0; i < Environment.numberOfKeys; ++i) {
+            		escritura_final = sb.append(String.valueOf(action[i]+", ")).toString();   
+            }
+            
+        	String[] arrayAuxiliar = coin_bricks[((tick%25)+6)%25].split(", ");
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) -infoEvaluacion[10])+", ").toString();
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -infoEvaluacion[6])+", ").toString();
+
+        	arrayAuxiliar = coin_bricks[((tick%25)+12)%25].split(", ");
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) -infoEvaluacion[10])+", ").toString();
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -infoEvaluacion[6])+", ").toString();
+        	
+        	arrayAuxiliar = coin_bricks[((tick%25)+24)%25].split(", ");
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) -infoEvaluacion[10])+", ").toString();
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -infoEvaluacion[6])+", ").toString();
+        	
+    		escritura_final = sb.append(String.valueOf(infoEvaluacion[1]+"\n")).toString();   
+
+        	
+            
+            coin_bricks[tick%25] = aux_sb.append(String.valueOf(infoEvaluacion[10]+", ")).append(String.valueOf(infoEvaluacion[6])).toString();
+        	
+        	try {
+    			fichero.write(escritura_final);
+    			fichero.flush();
+    		} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+        }
+    	else {
+    		auxString[tick] = miString;
+    		coin_bricks[tick] = aux_sb.append(String.valueOf(infoEvaluacion[10]+", ")).append(String.valueOf(infoEvaluacion[6])).toString();
+    	}
+        
+    	
     	System.out.println("\n");
         tick++;
         miString = null;
+        escritura_final = null;
         aux_sb = null;
 		} 
     
@@ -252,7 +298,7 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
        }
         if (action[1])
             action[0] = false;
-               
+
         return action;
     }
 }

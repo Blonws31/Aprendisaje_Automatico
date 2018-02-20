@@ -56,7 +56,6 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
     public T3BotAgent() {
         super("BaselineAgent");
 		escribir();
-		Cabecera_ARFF();
         reset();
         tick = 0;
     }
@@ -70,6 +69,11 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
     {
     	try {
 			fichero = new BufferedWriter(new FileWriter("T3BotAgent.arff", true));
+			String sFichero = "T3BotAgent.arff";
+			File fichero = new File (sFichero);
+			if(fichero.length() == 0) {
+				Cabecera_ARFF();
+			}
 			//fichero.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -125,12 +129,12 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
 			fichero.write("@attribute coins numeric\n");
 			fichero.write("@attribute bricks numeric\n");
 			fichero.write("@attribute enemys numeric\n");
-			fichero.write("@attribute action0 {True, False}\n");
-			fichero.write("@attribute action1 {True, False}\n");
-			fichero.write("@attribute action2 {True, False}\n");
-			fichero.write("@attribute action3 {True, False}\n");
-			fichero.write("@attribute action4 {True, False}\n");
-			fichero.write("@attribute action5 {True, False}\n");
+			fichero.write("@attribute action0 {true, false}\n");
+			fichero.write("@attribute action1 {true, false}\n");
+			fichero.write("@attribute action2 {true, false}\n");
+			fichero.write("@attribute action3 {true, false}\n");
+			fichero.write("@attribute action4 {true, false}\n");
+			fichero.write("@attribute action5 {true, false}\n");
 			fichero.write("@attribute coins_6 numeric\n");
 			fichero.write("@attribute enemys_6 numeric\n");
 			fichero.write("@attribute coins_12 numeric\n");

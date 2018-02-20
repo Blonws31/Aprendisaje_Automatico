@@ -44,6 +44,8 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
     static BufferedWriter fichero = null;   
 	String [] auxString = new String[25];
 	String [] coin_bricks = new String[25];
+	String [] arrayAuxiliar = new String[2];
+	String [] arrayInicial = new String[2];
 
 	boolean Salto = false;
 	int aux_salto = 0;
@@ -295,17 +297,38 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
             		escritura_final = sb.append(String.valueOf(action[i]+", ")).toString();   
             }
             
-        	String[] arrayAuxiliar = coin_bricks[((tick%25)+6)%25].split(", ");
-        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) -infoEvaluacion[10])+", ").toString();
-        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -infoEvaluacion[6])+", ").toString();
-
-        	arrayAuxiliar = coin_bricks[((tick%25)+12)%25].split(", ");
-        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) -infoEvaluacion[10])+", ").toString();
-        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -infoEvaluacion[6])+", ").toString();
+            if((tick%25)+6 < 25) {
+            	arrayAuxiliar = coin_bricks[((tick%25)+6)].split(", ");
+            	arrayInicial = coin_bricks[(tick%25)].split(", ");
+            }
+            else {
+            	arrayAuxiliar = coin_bricks[((tick%25)+6)%25].split(", ");
+            	arrayInicial = coin_bricks[(tick%25)].split(", ");
+            }
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) - Integer.parseInt(arrayInicial[0]))+", ").toString();
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -Integer.parseInt(arrayInicial[1]))+", ").toString();
         	
-        	arrayAuxiliar = coin_bricks[((tick%25)+24)%25].split(", ");
-        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) -infoEvaluacion[10])+", ").toString();
-        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -infoEvaluacion[6])+", ").toString();
+        	if((tick%25)+12 < 25) {
+            	arrayAuxiliar = coin_bricks[((tick%25)+6)].split(", ");
+            	arrayInicial = coin_bricks[(tick%25)].split(", ");
+            }
+            else {
+            	arrayAuxiliar = coin_bricks[((tick%25)+12)%25].split(", ");
+            	arrayInicial = coin_bricks[(tick%25)].split(", ");
+            }
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) -Integer.parseInt(arrayInicial[0]))+", ").toString();
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -Integer.parseInt(arrayInicial[1]))+", ").toString();
+        	
+        	if((tick%25)+24 < 25) {
+            	arrayAuxiliar = coin_bricks[((tick%25)+24)].split(", ");
+            	arrayInicial = coin_bricks[(tick%25)].split(", ");
+            }
+            else {
+            	arrayAuxiliar = coin_bricks[((tick%25)+24)%25].split(", ");
+            	arrayInicial = coin_bricks[(tick%25)].split(", ");
+            }
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) -Integer.parseInt(arrayInicial[0]))+", ").toString();
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -Integer.parseInt(arrayInicial[0]))+", ").toString();
         	
     		escritura_final = sb.append(String.valueOf(infoEvaluacion[1]+"\n")).toString();   
             

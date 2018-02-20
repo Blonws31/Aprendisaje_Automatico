@@ -33,7 +33,8 @@ import ch.idsia.benchmark.mario.environments.Environment;
 
 import java.io.*;
 import java.util.Random;
-import java.io.IOException;
+
+
 
 public class T3BotAgent extends BasicMarioAIAgent implements Agent {
 
@@ -55,6 +56,7 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
     public T3BotAgent() {
         super("BaselineAgent");
 		escribir();
+		Cabecera_ARFF();
         reset();
         tick = 0;
     }
@@ -67,7 +69,7 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
     public static void escribir()
     {
     	try {
-			fichero = new BufferedWriter(new FileWriter("ejemplos_Baseline.txt", true));
+			fichero = new BufferedWriter(new FileWriter("T3BotAgent.arff", true));
 			//fichero.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -75,6 +77,75 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
 		}    
     }
     
+    public static void Cabecera_ARFF() {
+    	try {
+			fichero.write("@relation T3BotAgent\n\n");
+			fichero.flush();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		for (int mx = 0; mx < 19*19; mx++) {
+			try {
+				fichero.write("@attribute array"+mx+" numeric\n");
+				fichero.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	     }
+		try {
+			fichero.write("@attribute mario_x numeric\n");
+			fichero.write("@attribute mario_y numeric\n");
+			fichero.write("@attribute marioStatus numeric\n");
+			fichero.write("@attribute marioMode numeric\n");
+			fichero.write("@attribute isMarioOnGround {1, 0}\n");
+			fichero.write("@attribute isMarioAbleToJump {1, 0}\n");
+			fichero.write("@attribute isMarioAbleToShoot {1, 0}\n");
+			fichero.write("@attribute isMarioCarrying {1, 0}\n");
+			fichero.write("@attribute killsTotal numeric\n");
+			fichero.write("@attribute killsByFire numeric\n");
+			fichero.write("@attribute killsByStomp numeric\n");
+			fichero.write("@attribute killsByShell numeric\n");
+			fichero.write("@attribute timeLeft numeric\n");
+			fichero.write("@attribute distancePassedCells numeric\n");
+			fichero.write("@attribute flowersDevoured numeric\n");
+			fichero.write("@attribute killsByFire2 numeric\n");
+			fichero.write("@attribute killsByShell2 numeric\n");
+			fichero.write("@attribute killsByStomp2 numeric\n");
+			fichero.write("@attribute killsTotal2 numeric\n");
+			fichero.write("@attribute marioMode2 numeric\n");
+			fichero.write("@attribute marioStatus2 numeric\n");
+			fichero.write("@attribute mushroomsDevoured numeric\n");
+			fichero.write("@attribute coinsGained numeric\n");
+			fichero.write("@attribute timeLeft2 numeric\n");
+			fichero.write("@attribute timeSpent numeric\n");
+			fichero.write("@attribute hiddenBlocksFound numeric\n");
+			fichero.write("@attribute reward numeric\n");
+			fichero.write("@attribute coins numeric\n");
+			fichero.write("@attribute bricks numeric\n");
+			fichero.write("@attribute enemys numeric\n");
+			fichero.write("@attribute action0 {True, False}\n");
+			fichero.write("@attribute action1 {True, False}\n");
+			fichero.write("@attribute action2 {True, False}\n");
+			fichero.write("@attribute action3 {True, False}\n");
+			fichero.write("@attribute action4 {True, False}\n");
+			fichero.write("@attribute action5 {True, False}\n");
+			fichero.write("@attribute coins_6 numeric\n");
+			fichero.write("@attribute enemys_6 numeric\n");
+			fichero.write("@attribute coins_12 numeric\n");
+			fichero.write("@attribute enemys_12 numeric\n");
+			fichero.write("@attribute coins_24 numeric\n");
+			fichero.write("@attribute enemys_24 numeric\n");
+			fichero.write("@attribute distancePassedPhys numeric\n\n");
+			fichero.write("@data\n");
+			fichero.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    }
     public void integrateObservation(Environment environment) {	
     	Salto = false;
     	aux_sb = new StringBuffer();
@@ -197,8 +268,10 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
         int[] infoEvaluacion;
         infoEvaluacion = environment.getEvaluationInfoAsInts();
         for (int mx = 0; mx < infoEvaluacion.length; mx++){
-        	System.out.print(infoEvaluacion[mx] + " ");
-        	miString = sb.append(String.valueOf(infoEvaluacion[mx]+", ")).toString();
+        	if(mx != 1) {
+            	System.out.print(infoEvaluacion[mx] + " ");
+            	miString = sb.append(String.valueOf(infoEvaluacion[mx]+", ")).toString();
+        	}
         }
         
         // Informacion del refuerzo/puntuacion que ha obtenido Mario. Nos puede servir para determinar lo bien o mal que lo esta haciendo.
@@ -231,8 +304,6 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
         	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -infoEvaluacion[6])+", ").toString();
         	
     		escritura_final = sb.append(String.valueOf(infoEvaluacion[1]+"\n")).toString();   
-
-        	
             
             coin_bricks[tick%25] = aux_sb.append(String.valueOf(infoEvaluacion[10]+", ")).append(String.valueOf(infoEvaluacion[6])).toString();
         	

@@ -30,26 +30,20 @@ package ch.idsia.agents.controllers;
 import ch.idsia.agents.Agent;
 //import ch.idsia.benchmark.mario.engine.sprites.Mario;
 import ch.idsia.benchmark.mario.environments.Environment;
-
 import java.io.*;
 import java.util.Random;
-
-
 
 public class T3BotAgent extends BasicMarioAIAgent implements Agent {
 
     int tick;
+	int aux_salto = 0;
+	boolean Salto = false;
     private Random R = null;
-    
     static BufferedWriter fichero = null;   
 	String [] auxString = new String[25];
 	String [] coin_bricks = new String[25];
 	String [] arrayAuxiliar = new String[2];
 	String [] arrayInicial = new String[2];
-
-	boolean Salto = false;
-	int aux_salto = 0;
-	
 	String miString = null;
 	String escritura_final = null;
 	StringBuffer aux_sb = new StringBuffer();
@@ -346,7 +340,6 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
     		auxString[tick] = miString;
     		coin_bricks[tick] = aux_sb.append(String.valueOf(infoEvaluacion[10]+", ")).append(String.valueOf(infoEvaluacion[6])).toString();
     	}
-        
     	
     	System.out.println("\n");
         tick++;

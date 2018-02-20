@@ -32,10 +32,7 @@ import ch.idsia.benchmark.mario.engine.sprites.Mario;
 import ch.idsia.benchmark.mario.environments.Environment;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Random;
+import java.io.*;
 
 /**
  * Created by PLG Group.
@@ -43,29 +40,25 @@ import java.util.Random;
  * Date: Jan 24, 2014
  * Package: ch.idsia.controllers.agents.controllers;
  */
-public final class T3HumanAgent extends KeyAdapter implements Agent
-{
+public final class T3HumanAgent extends KeyAdapter implements Agent {
     
     private boolean[] Action    = null;
     private String Name         = "T3HumanAgent";
     
     int tick;
 	int aux_salto = 0;
-
+	boolean Salto = false;
     static BufferedWriter fichero = null;
-    
 	String [] auxString = new String[25];
 	String [] coin_bricks = new String[25];
-
-	boolean Salto = false;
-	
+	String [] arrayAuxiliar = new String[2];
+	String [] arrayInicial = new String[2];
 	String miString = null;
 	String escritura_final = null;
 	StringBuffer aux_sb = new StringBuffer();
 	StringBuffer sb = new StringBuffer();
-	
-    public T3HumanAgent()
-    {
+		
+	T3HumanAgent() {
     	escribir();
         this.reset(); 
     }
@@ -73,11 +66,86 @@ public final class T3HumanAgent extends KeyAdapter implements Agent
     {
     	try {
 			fichero = new BufferedWriter(new FileWriter("T3BotAgent.arff", true));
+			String sFichero = "T3BotAgent.arff";
+			File fichero = new File (sFichero);
+			if(fichero.length() == 0) {
+				Cabecera_ARFF();
+			}
 			//fichero.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}    
+		}      
+    }
+    
+    public static void Cabecera_ARFF() {
+    	try {
+			fichero.write("@relation T3BotAgent\n\n");
+			fichero.flush();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		for (int mx = 0; mx < 19*19; mx++) {
+			try {
+				fichero.write("@attribute array"+mx+" numeric\n");
+				fichero.flush();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	     }
+		try {
+			fichero.write("@attribute mario_x numeric\n");
+			fichero.write("@attribute mario_y numeric\n");
+			fichero.write("@attribute marioStatus numeric\n");
+			fichero.write("@attribute marioMode numeric\n");
+			fichero.write("@attribute isMarioOnGround {1, 0}\n");
+			fichero.write("@attribute isMarioAbleToJump {1, 0}\n");
+			fichero.write("@attribute isMarioAbleToShoot {1, 0}\n");
+			fichero.write("@attribute isMarioCarrying {1, 0}\n");
+			fichero.write("@attribute killsTotal numeric\n");
+			fichero.write("@attribute killsByFire numeric\n");
+			fichero.write("@attribute killsByStomp numeric\n");
+			fichero.write("@attribute killsByShell numeric\n");
+			fichero.write("@attribute timeLeft numeric\n");
+			fichero.write("@attribute distancePassedCells numeric\n");
+			fichero.write("@attribute flowersDevoured numeric\n");
+			fichero.write("@attribute killsByFire2 numeric\n");
+			fichero.write("@attribute killsByShell2 numeric\n");
+			fichero.write("@attribute killsByStomp2 numeric\n");
+			fichero.write("@attribute killsTotal2 numeric\n");
+			fichero.write("@attribute marioMode2 numeric\n");
+			fichero.write("@attribute marioStatus2 numeric\n");
+			fichero.write("@attribute mushroomsDevoured numeric\n");
+			fichero.write("@attribute coinsGained numeric\n");
+			fichero.write("@attribute timeLeft2 numeric\n");
+			fichero.write("@attribute timeSpent numeric\n");
+			fichero.write("@attribute hiddenBlocksFound numeric\n");
+			fichero.write("@attribute reward numeric\n");
+			fichero.write("@attribute coins numeric\n");
+			fichero.write("@attribute bricks numeric\n");
+			fichero.write("@attribute enemys numeric\n");
+			fichero.write("@attribute action0 {true, false}\n");
+			fichero.write("@attribute action1 {true, false}\n");
+			fichero.write("@attribute action2 {true, false}\n");
+			fichero.write("@attribute action3 {true, false}\n");
+			fichero.write("@attribute action4 {true, false}\n");
+			fichero.write("@attribute action5 {true, false}\n");
+			fichero.write("@attribute coins_6 numeric\n");
+			fichero.write("@attribute enemys_6 numeric\n");
+			fichero.write("@attribute coins_12 numeric\n");
+			fichero.write("@attribute enemys_12 numeric\n");
+			fichero.write("@attribute coins_24 numeric\n");
+			fichero.write("@attribute enemys_24 numeric\n");
+			fichero.write("@attribute distancePassedPhys numeric\n\n");
+			fichero.write("@data\n");
+			fichero.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
     }
     
     @Override
@@ -91,56 +159,11 @@ public final class T3HumanAgent extends KeyAdapter implements Agent
 
     @Override
     public void integrateObservation(Environment environment){
-    	
     	Salto = false;
     	aux_sb = new StringBuffer();
     	sb = new StringBuffer();
-        // IMPORTANTE: Si se utilizan métodos que tardan mucho como println, cada tick puede tardar en procesarse más de
-        // de lo que permite la competición de Mario AI. Si el agente es demasiado lento procesando y el simulador no
-        // puede funcionar en tiempo real, se cerrará automáticamente, lor lo que se insta a que el código escrito sea
-        // lo más eficiente posible.
-        
-        
-        // INFORMACION DEL ENTORNO
-        
-        // En la interfaz Environment.java vienen definidos los metodos que se pueden emplear para recuperar informacion
-        // del entorno de Mario. Algunos de los mas importantes (y que utilizaremos durante el curso)...
 
         System.out.println("------------------ TICK " + tick + " ------------------");
-        /*
-        // Devuelve un array de 19x19 donde Mario ocupa la posicion 9,9 con informacion de los elementos
-        // en la escena. La funcion getLevelSceneObservationZ recibe un numero para indicar el nivel de detalle
-        // de la informacion devuelta. En uno de los anexos del tutorial 1 se puede encontrar informacion de 
-        // los niveles de detalle y el tipo de informacion devuelta.
-        System.out.println("\nESCENA");
-        byte [][] envesc;
-        envesc = environment.getLevelSceneObservationZ(1);
-        for (int mx = 0; mx < envesc.length; mx++){
-            System.out.print(mx + ": [");
-            for (int my = 0; my < envesc[mx].length; my++)
-                System.out.print(envesc[mx][my] + " ");
-
-            System.out.println("]");
-        }
-        */
-        
-        /*
-        // Devuelve un array de 19x19 donde Mario ocupa la posicion 9,9 con informacion de los enemigos
-        // en la escena. La funcion getEnemiesObservationZ recibe un numero para indicar el nivel de detalle
-        // de la informacion devuelta. En uno de los anexos del tutorial 1 se puede encontrar informacion de 
-        // los niveles de detalle y el tipo de informacion devuelta.
-        System.out.println("\nENEMIGOS");
-        byte [][] envenm;
-        envenm = environment.getEnemiesObservationZ(1);
-        for (int mx = 0; mx < envenm.length; mx++) {
-            System.out.print(mx + ": [");
-            for (int my = 0; my < envenm[mx].length; my++)
-                System.out.print(envenm[mx][my] + " ");
-            
-            System.out.println("]");
-        }
-        */
-        
         
         // Devuelve un array de 19x19 donde Mario ocupa la posicion 9,9 con la union de los dos arrays
         // anteriores, es decir, devuelve en un mismo array la informacion de los elementos de la
@@ -183,16 +206,6 @@ public final class T3HumanAgent extends KeyAdapter implements Agent
         	//escribir(String.valueOf(posMario[mx]+", "));
         	miString = sb.append(String.valueOf(posMario[mx]+", ")).toString();
         }
-        
-        // Posicion que ocupa Mario en el array anterior
-       /* System.out.println("\nPOSICION MARIO MATRIZ");
-        int[] posMarioEgo;
-        posMarioEgo = environment.getMarioEgoPos();
-        for (int mx = 0; mx < posMarioEgo.length; mx++) {
-        	System.out.print(posMarioEgo[mx] + " ");
-        	//escribir(String.valueOf(posMarioEgo[mx]+", "));
-        	miString = sb.append(String.valueOf(posMarioEgo[mx]+", ")).toString();
-        }*/
             
         // Estado de mario
         // marioStatus, marioMode, isMarioOnGround (1 o 0), isMarioAbleToJump() (1 o 0), isMarioAbleToShoot (1 o 0), 
@@ -213,8 +226,10 @@ public final class T3HumanAgent extends KeyAdapter implements Agent
         int[] infoEvaluacion;
         infoEvaluacion = environment.getEvaluationInfoAsInts();
         for (int mx = 0; mx < infoEvaluacion.length; mx++){
-        	System.out.print(infoEvaluacion[mx] + " ");
-        	miString = sb.append(String.valueOf(infoEvaluacion[mx]+", ")).toString();
+        	if(mx != 1) {
+            	System.out.print(infoEvaluacion[mx] + " ");
+            	miString = sb.append(String.valueOf(infoEvaluacion[mx]+", ")).toString();
+        	}
         }
         
         // Informacion del refuerzo/puntuacion que ha obtenido Mario. Nos puede servir para determinar lo bien o mal que lo esta haciendo.
@@ -234,17 +249,38 @@ public final class T3HumanAgent extends KeyAdapter implements Agent
             		escritura_final = sb.append(String.valueOf(Action[i]+", ")).toString();   
             }
             
-        	String[] arrayAuxiliar = coin_bricks[((tick%25)+6)%25].split(", ");
-        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) -infoEvaluacion[10])+", ").toString();
-        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -infoEvaluacion[6])+", ").toString();
-
-        	arrayAuxiliar = coin_bricks[((tick%25)+12)%25].split(", ");
-        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) -infoEvaluacion[10])+", ").toString();
-        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -infoEvaluacion[6])+", ").toString();
+            if((tick%25)+6 < 25) {
+            	arrayAuxiliar = coin_bricks[((tick%25)+6)].split(", ");
+            	arrayInicial = coin_bricks[(tick%25)].split(", ");
+            }
+            else {
+            	arrayAuxiliar = coin_bricks[((tick%25)+6)%25].split(", ");
+            	arrayInicial = coin_bricks[(tick%25)].split(", ");
+            }
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) - Integer.parseInt(arrayInicial[0]))+", ").toString();
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -Integer.parseInt(arrayInicial[1]))+", ").toString();
         	
-        	arrayAuxiliar = coin_bricks[((tick%25)+24)%25].split(", ");
-        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) -infoEvaluacion[10])+", ").toString();
-        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -infoEvaluacion[6])+", ").toString();
+        	if((tick%25)+12 < 25) {
+            	arrayAuxiliar = coin_bricks[((tick%25)+6)].split(", ");
+            	arrayInicial = coin_bricks[(tick%25)].split(", ");
+            }
+            else {
+            	arrayAuxiliar = coin_bricks[((tick%25)+12)%25].split(", ");
+            	arrayInicial = coin_bricks[(tick%25)].split(", ");
+            }
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) -Integer.parseInt(arrayInicial[0]))+", ").toString();
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -Integer.parseInt(arrayInicial[1]))+", ").toString();
+        	
+        	if((tick%25)+24 < 25) {
+            	arrayAuxiliar = coin_bricks[((tick%25)+24)].split(", ");
+            	arrayInicial = coin_bricks[(tick%25)].split(", ");
+            }
+            else {
+            	arrayAuxiliar = coin_bricks[((tick%25)+24)%25].split(", ");
+            	arrayInicial = coin_bricks[(tick%25)].split(", ");
+            }
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) -Integer.parseInt(arrayInicial[0]))+", ").toString();
+        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[1]) -Integer.parseInt(arrayInicial[0]))+", ").toString();
         	
     		escritura_final = sb.append(String.valueOf(infoEvaluacion[1]+"\n")).toString();   
             
@@ -262,7 +298,6 @@ public final class T3HumanAgent extends KeyAdapter implements Agent
     		auxString[tick] = miString;
     		coin_bricks[tick] = aux_sb.append(String.valueOf(infoEvaluacion[10]+", ")).append(String.valueOf(infoEvaluacion[6])).toString();
     	}
-        
     	
     	System.out.println("\n");
         tick++;

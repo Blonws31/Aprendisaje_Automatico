@@ -79,7 +79,7 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
     
     public static void Cabecera_ARFF() {
     	try {
-			fichero.write("@relation T3BotAgent\n\n");
+			fichero.write("@RELATION T3BotAgent\n\n");
 			fichero.flush();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -87,7 +87,7 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
 		}
 		for (int mx = 0; mx < 19*19; mx++) {
 			try {
-				fichero.write("@attribute array"+mx+" numeric\n");
+				fichero.write("@ATTRIBUTE array"+mx+" NUMERIC\n");
 				fichero.flush();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -95,49 +95,49 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
 			}
 	     }
 		try {
-			fichero.write("@attribute mario_x numeric\n");
-			fichero.write("@attribute mario_y numeric\n");
-			fichero.write("@attribute marioStatus numeric\n");
-			fichero.write("@attribute marioMode numeric\n");
-			fichero.write("@attribute isMarioOnGround {1, 0}\n");
-			fichero.write("@attribute isMarioAbleToJump {1, 0}\n");
-			fichero.write("@attribute isMarioAbleToShoot {1, 0}\n");
-			fichero.write("@attribute isMarioCarrying {1, 0}\n");
-			fichero.write("@attribute killsTotal numeric\n");
-			fichero.write("@attribute killsByFire numeric\n");
-			fichero.write("@attribute killsByStomp numeric\n");
-			fichero.write("@attribute killsByShell numeric\n");
-			fichero.write("@attribute timeLeft numeric\n");
-			fichero.write("@attribute distancePassedCells numeric\n");
-			fichero.write("@attribute flowersDevoured numeric\n");
-			fichero.write("@attribute killsByFire2 numeric\n");
-			fichero.write("@attribute killsByShell2 numeric\n");
-			fichero.write("@attribute killsByStomp2 numeric\n");
-			fichero.write("@attribute killsTotal2 numeric\n");
-			fichero.write("@attribute marioMode2 numeric\n");
-			fichero.write("@attribute marioStatus2 numeric\n");
-			fichero.write("@attribute mushroomsDevoured numeric\n");
-			fichero.write("@attribute coinsGained numeric\n");
-			fichero.write("@attribute timeLeft2 numeric\n");
-			fichero.write("@attribute timeSpent numeric\n");
-			fichero.write("@attribute hiddenBlocksFound numeric\n");
-			fichero.write("@attribute reward numeric\n");
-			fichero.write("@attribute coins numeric\n");
-			fichero.write("@attribute bricks numeric\n");
-			fichero.write("@attribute enemys numeric\n");
-			fichero.write("@attribute action0 {true, false}\n");
-			fichero.write("@attribute action1 {true, false}\n");
-			fichero.write("@attribute action2 {true, false}\n");
-			fichero.write("@attribute action3 {true, false}\n");
-			fichero.write("@attribute action4 {true, false}\n");
-			fichero.write("@attribute action5 {true, false}\n");
-			fichero.write("@attribute coins_6 numeric\n");
-			fichero.write("@attribute enemys_6 numeric\n");
-			fichero.write("@attribute coins_12 numeric\n");
-			fichero.write("@attribute enemys_12 numeric\n");
-			fichero.write("@attribute coins_24 numeric\n");
-			fichero.write("@attribute enemys_24 numeric\n");
-			fichero.write("@attribute distancePassedPhys numeric\n\n");
+			fichero.write("@ATTRIBUTE mario_x NUMERIC\n");
+			fichero.write("@ATTRIBUTE mario_y NUMERIC\n");
+			fichero.write("@ATTRIBUTE marioStatus NUMERIC\n");
+			fichero.write("@ATTRIBUTE marioMode NUMERIC\n");
+			fichero.write("@ATTRIBUTE isMarioOnGround {1, 0}\n");
+			fichero.write("@ATTRIBUTE isMarioAbleToJump {1, 0}\n");
+			fichero.write("@ATTRIBUTE isMarioAbleToShoot {1, 0}\n");
+			fichero.write("@ATTRIBUTE isMarioCarrying {1, 0}\n");
+			fichero.write("@ATTRIBUTE killsTotal NUMERIC\n");
+			fichero.write("@ATTRIBUTE killsByFire NUMERIC\n");
+			fichero.write("@ATTRIBUTE killsByStomp NUMERIC\n");
+			fichero.write("@ATTRIBUTE killsByShell NUMERIC\n");
+			fichero.write("@ATTRIBUTE timeLeft NUMERIC\n");
+			fichero.write("@ATTRIBUTE distancePassedCells NUMERIC\n");
+			fichero.write("@ATTRIBUTE flowersDevoured NUMERIC\n");
+			fichero.write("@ATTRIBUTE killsByFire2 NUMERIC\n");
+			fichero.write("@ATTRIBUTE killsByShell2 NUMERIC\n");
+			fichero.write("@ATTRIBUTE killsByStomp2 NUMERIC\n");
+			fichero.write("@ATTRIBUTE killsTotal2 NUMERIC\n");
+			fichero.write("@ATTRIBUTE marioMode2 NUMERIC\n");
+			fichero.write("@ATTRIBUTE marioStatus2 NUMERIC\n");
+			fichero.write("@ATTRIBUTE mushroomsDevoured NUMERIC\n");
+			fichero.write("@ATTRIBUTE coinsGained NUMERIC\n");
+			fichero.write("@ATTRIBUTE timeLeft2 NUMERIC\n");
+			fichero.write("@ATTRIBUTE timeSpent NUMERIC\n");
+			fichero.write("@ATTRIBUTE hiddenBlocksFound NUMERIC\n");
+			fichero.write("@ATTRIBUTE reward NUMERIC\n");
+			fichero.write("@ATTRIBUTE coins NUMERIC\n");
+			fichero.write("@ATTRIBUTE bricks NUMERIC\n");
+			fichero.write("@ATTRIBUTE enemys NUMERIC\n");
+			fichero.write("@ATTRIBUTE action0 {true, false}\n");
+			fichero.write("@ATTRIBUTE action1 {true, false}\n");
+			fichero.write("@ATTRIBUTE action2 {true, false}\n");
+			fichero.write("@ATTRIBUTE action3 {true, false}\n");
+			fichero.write("@ATTRIBUTE action4 {true, false}\n");
+			fichero.write("@ATTRIBUTE action5 {true, false}\n");
+			fichero.write("@ATTRIBUTE coins_6 NUMERIC\n");
+			fichero.write("@ATTRIBUTE enemys_6 NUMERIC\n");
+			fichero.write("@ATTRIBUTE coins_12 NUMERIC\n");
+			fichero.write("@ATTRIBUTE enemys_12 NUMERIC\n");
+			fichero.write("@ATTRIBUTE coins_24 NUMERIC\n");
+			fichero.write("@ATTRIBUTE enemys_24 NUMERIC\n");
+			fichero.write("@ATTRIBUTE distancePassedPhys NUMERIC\n\n");
 			fichero.write("@data\n");
 			fichero.flush();
 		} catch (IOException e) {
@@ -226,7 +226,6 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
         }
         if(((env[9][8] == -62 ) || (env[9][8] == 80) || (env[9][8] == -60) || (env[9][10] == -62) || (env[9][10] == 80) || (env[9][10] == -60) || (env[9][8] == -85) 
         		|| (env[9][10] == -85) || (env[9][8] == -24) || (env[9][10] == -24)) && (env[9][8] != 0 || env[9][10] != 0)) {
-        	System.out.println("Valores: "+env[9][8]+"_"+env[9][10]+" :"+Salto);
     		Salto = true;
     	}
         // Posicion de Mario utilizando las coordenadas del sistema

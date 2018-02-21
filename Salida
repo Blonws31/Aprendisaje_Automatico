@@ -1,0 +1,32 @@
+Tester:     weka.experiment.PairedCorrectedTTester
+Analysing:  Percent_correct
+Datasets:   8
+Resultsets: 7
+Confidence: 0.05 (two tailed)
+Sorted by:  -
+Date:       21/02/18 19:26
+
+
+Dataset                   (1) trees.J4 | (2) rules (3) rule (4) bayes (5) lazy. (6) lazy. (7) lazy.
+---------------------------------------------------------------------------------------------------
+T3BotAgent-weka.filters.u(100)   35.47 |   33.94 *   8.30 *   32.94 *   32.74 *   33.95 *   34.57  
+'T3BotAgent-weka.filters.(100)   31.68 |   29.78 *   8.30 *   32.77     27.85 *   30.22 *   30.61  
+T3BotAgent-weka.filters.u(100)   32.34 |   30.31 *   8.30 *   32.49     28.53 *   30.73 *   31.84  
+T3BotAgent-weka.filters.u(100)   31.84 |   30.20 *   8.30 *   32.87     28.87 *   30.90     31.84  
+T3HumanAgent-weka.filters(100)   13.87 |   13.62     2.80 *   12.70 *   13.00 *   13.98     13.58  
+'T3BotAgent-weka.filters.(100)   31.68 |   29.90 *   8.30 *   32.84 v   27.81 *   30.38     30.73  
+T3HumanAgent-weka.filters(100)   14.85 |   14.66     2.80 *   14.92     14.18     14.48     14.84  
+'T3HumanAgent-weka.filter(100)   14.99 |   14.64     2.80 *   14.98     14.18     14.47     14.63  
+---------------------------------------------------------------------------------------------------
+                               (v/ /*) |   (0/3/5)  (0/0/8)   (1/5/2)   (0/2/6)   (0/5/3)   (0/8/0)
+
+
+Key:
+(1) trees.J48 '-C 0.25 -M 2' -2.17733168393644448E17
+(2) rules.PART '-M 2 -C 0.25 -Q 1' 8.1214550397825987E18
+(3) rules.ZeroR '' 4.8055541465867952E16
+(4) bayes.NaiveBayes '' 5.9952312017856973E18
+(5) lazy.IBk '-K 1 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"' -3.080186098777067E18
+(6) lazy.IBk '-K 3 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"' -3.080186098777067E18
+(7) lazy.IBk '-K 7 -W 0 -A \"weka.core.neighboursearch.LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\"' -3.080186098777067E18
+

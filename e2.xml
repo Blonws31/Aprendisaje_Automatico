@@ -112,13 +112,13 @@
    </object>
    <object class="javax.swing.DefaultListModel" name="datasets">
       <object class="java.io.File" name="0">C:/Users/criss/Desktop/Tutorial1-AA/T3BotAgent_Discr.arff</object>
-      <object class="java.io.File" name="1">C:/Users/criss/Desktop/Tutorial1-AA/T3BotAgent_Discr_Selec.arff</object>
-      <object class="java.io.File" name="2">C:/Users/criss/Desktop/Tutorial1-AA/T3BotAgent_Discr_noObs.arff</object>
-      <object class="java.io.File" name="3">C:/Users/criss/Desktop/Tutorial1-AA/T3BotAgent_Discr_noObs_noEva.arff</object>
+      <object class="java.io.File" name="1">C:/Users/criss/Desktop/Tutorial1-AA/T3BotAgent_Discr_noObs.arff</object>
+      <object class="java.io.File" name="2">C:/Users/criss/Desktop/Tutorial1-AA/T3BotAgent_Discr_noObs_noEva.arff</object>
+      <object class="java.io.File" name="3">C:/Users/criss/Desktop/Tutorial1-AA/T3BotAgent_Discr_Selec.arff</object>
       <object class="java.io.File" name="4">C:/Users/criss/Desktop/Tutorial1-AA/T3HumanAgent_Discr.arff</object>
-      <object class="java.io.File" name="5">C:/Users/criss/Desktop/Tutorial1-AA/T3HumanAgent_Discr_Selec.arff</object>
-      <object class="java.io.File" name="6">C:/Users/criss/Desktop/Tutorial1-AA/T3HumanAgent_Discr_noObs.arff</object>
-      <object class="java.io.File" name="7">C:/Users/criss/Desktop/Tutorial1-AA/T3HumanAgent_Discr_noObs_noEva.arff</object>
+      <object class="java.io.File" name="5">C:/Users/criss/Desktop/Tutorial1-AA/T3HumanAgent_Discr_noObs.arff</object>
+      <object class="java.io.File" name="6">C:/Users/criss/Desktop/Tutorial1-AA/T3HumanAgent_Discr_noObs_noEva.arff</object>
+      <object class="java.io.File" name="7">C:/Users/criss/Desktop/Tutorial1-AA/T3HumanAgent_Discr_Selec.arff</object>
    </object>
    <object class="int" name="runUpper" primitive="yes">10</object>
    <object class="weka.experiment.CrossValidationResultProducer" name="resultProducer">

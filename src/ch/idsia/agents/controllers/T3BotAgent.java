@@ -224,8 +224,8 @@ public class T3BotAgent extends BasicMarioAIAgent implements Agent {
             }
             //System.out.println("]");
         }
-        if(((env[9][8] == -62 ) || (env[9][8] == 80) || (env[9][8] == -60) || (env[9][10] == -62) || (env[9][10] == 80) || (env[9][10] == -60) || (env[9][8] == -85) 
-        		|| (env[9][10] == -85) || (env[9][8] == -24) || (env[9][10] == -24)) && (env[9][8] != 0 || env[9][10] != 0)) {
+        if(((env[9][10] == -62) || (env[9][10] == 80) || (env[9][10] == -60) || (env[9][8] == -85) 
+        		|| (env[9][10] == -85)|| (env[9][10] == -24)) ) {
     		Salto = true;
     	}
         // Posicion de Mario utilizando las coordenadas del sistema

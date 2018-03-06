@@ -322,7 +322,6 @@ public class P1BotAgent extends BasicMarioAIAgent implements Agent {
             action[i] = toggleParticularAction;
         }
 
-       
        action[0] = false;
        action[1] = true;
        action[2] = false;

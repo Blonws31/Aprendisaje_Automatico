@@ -92,7 +92,7 @@ public final class P1HumanAgent extends KeyAdapter implements Agent {
 			fichero.write("@ATTRIBUTE celda[6][9] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[7][9] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[8][9] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[9][9] NUMERIC\n");
+			fichero.write("@ATTRIBUTE celda[8][10] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[9][10] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[9][11] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[10][10] NUMERIC\n");
@@ -149,7 +149,7 @@ public final class P1HumanAgent extends KeyAdapter implements Agent {
 			fichero.write("@ATTRIBUTE enemys_12 NUMERIC\n");
 			fichero.write("@ATTRIBUTE coins_24 NUMERIC\n");
 			fichero.write("@ATTRIBUTE enemys_24 NUMERIC\n");
-			fichero.write("@ATTRIBUTE Action {00, 01, 10, 11}\n");
+			fichero.write("@ATTRIBUTE ACTION {00, 01, 10, 11}\n");
 			fichero.write("@data\n");
 			fichero.flush();
 		} catch (IOException e) {
@@ -169,11 +169,10 @@ public final class P1HumanAgent extends KeyAdapter implements Agent {
 
     @Override
     public void integrateObservation(Environment environment){
-    	Salto = false;
     	aux_sb = new StringBuffer();
     	sb = new StringBuffer();
-
-    	// Devuelve un array de 19x19 donde Mario ocupa la posicion 9,9 con la union de los dos arrays
+        
+        // Devuelve un array de 19x19 donde Mario ocupa la posicion 9,9 con la union de los dos arrays
         // anteriores, es decir, devuelve en un mismo array la informacion de los elementos de la
         // escena y los enemigos.
         //System.out.println("\nMERGE:");
@@ -195,8 +194,8 @@ public final class P1HumanAgent extends KeyAdapter implements Agent {
             	}
             }
         }
-    	miString = sb.append(String.valueOf(env[6][9])+", "+String.valueOf(env[7][9])+", "+String.valueOf(env[8][9])+", "
-    			+String.valueOf(env[9][9])+", "+String.valueOf(env[9][10])+", "+String.valueOf(env[9][11])+", "
+        miString = sb.append(String.valueOf(env[6][9])+", "+String.valueOf(env[7][9])+", "+String.valueOf(env[8][9])+", "
+        		+String.valueOf(env[8][10])+", "+String.valueOf(env[9][10])+", "+String.valueOf(env[9][11])+", "
     			+String.valueOf(env[10][10])+", "+String.valueOf(env[11][10])+", "+String.valueOf(env[12][10])+", "
     			+String.valueOf(env[13][10])+", "+String.valueOf(env[14][10])+", "+String.valueOf(env[15][10])+", "
     			+String.valueOf(env[16][10])+", "+String.valueOf(env[17][10])+", "
@@ -207,27 +206,13 @@ public final class P1HumanAgent extends KeyAdapter implements Agent {
     			+String.valueOf(env[13][12])+", "+String.valueOf(env[14][12])+", "+String.valueOf(env[15][12])+", "
     			+String.valueOf(env[16][12])+", "+String.valueOf(env[17][12])+", ").toString();
     	
-       if(	   env[9][9] == -85 || env[9][9] == -24 || env[9][9] == -62 || env[9][9] == 80 || env[9][9] == -60 ||
-    		   env[9][10] == -85 || env[9][10] == -24 || env[9][10] == -62 || env[9][10] == 80 || env[9][10] == -60 ||
-    		   env[9][11] == -85 || env[9][11] == -24 || env[9][11] == -62 || env[9][11] == 80 || env[9][11] == -60 ||
-    		   env[10][9] == -85 || env[10][9] == -24 || env[10][9] == -62 || env[10][9] == 80 || env[10][9] == -60 ||
-    		   env[10][10] == -85 || env[10][10] == -24 || env[10][10] == -62 || env[10][10] == 80 || env[10][10] == -60 ||
-    		   env[10][11] == -85 || env[10][11] == -24 || env[10][11] == -62 || env[10][11] == 80 || env[10][11] == -60 ||
-        		((env[6][9] == 00 || env[7][9] == 00 || env[8][9] == 00) &&
-        		env[10][10] == 00 && env[10][11] == 00 && env[10][12] == 00 && env[11][10] == 00 && env[11][11] == 00 && env[11][12] == 00 &&
-        		env[12][10] == 00 && env[12][11] == 00 && env[12][12] == 00 && env[13][10] == 00 && env[13][11] == 00 && env[13][12] == 00 &&
-        		env[14][10] == 00 && env[14][11] == 00 && env[14][12] == 00 && env[15][10] == 00 && env[15][11] == 00 && env[15][12] == 00 &&
-        		env[16][10] == 00 && env[16][11] == 00 && env[16][12] == 00 && env[17][10] == 00 && env[17][11] == 00 && env[17][12] == 00)) {
-    		Salto = true;
-    	}
-        
-        // Posicion de Mario utilizando las coordenadas del sistema
+     // Posicion de Mario utilizando las coordenadas del sistema
         float[] posMario;
         posMario = environment.getMarioFloatPos();
         for (int mx = 0; mx < posMario.length; mx++) {
             	miString = sb.append(String.valueOf(posMario[mx]+", ")).toString();
         }
-          
+        
         // Estado de mario
         // marioStatus, marioMode, isMarioOnGround (1 o 0), isMarioAbleToJump() (1 o 0), isMarioAbleToShoot (1 o 0), 
         // isMarioCarrying (1 o 0), killsTotal, killsByFire,  killsByStomp, killsByShell, timeLeft
@@ -295,21 +280,22 @@ public final class P1HumanAgent extends KeyAdapter implements Agent {
 
             getAction();
           //Action PARADO
-       		if(Action[0] == false && Action[1] == false && Action[2] == false && Action[3] == false && Action[4] == false && Action[5] == false) {
+       		if(Action[0] == false && Action[1] == false && (Action[2] == false || Action[2] == true) && Action[3] == false && (Action[4] == false || 
+       				Action[4] == true ) && (Action[5] == false || Action[5] == true)) {
        			escritura_final = sb.append("00\n").toString();   	
        		}
     	   	//Action Salta
-    	   	else if(Action[0] == false && Action[1] == false && Action[2] == false && Action[3] == true && (Action[4] == false || 
+    	   	else if(Action[0] == false && Action[1] == false && (Action[2] == false || Action[2] == true)  && Action[3] == true && (Action[4] == false || 
     	   			Action[4] == true) && (Action[5] == false || Action[5] == true)) {
     	           escritura_final = sb.append("01\n").toString();  
     	   	}
     	   	//Action Avanza
-    	   	else if((Action[0] == true || Action[1] == true) && Action[2] == false && Action[3] == false && (Action[4] == false || 
+    	   	else if((Action[0] == true || Action[1] == true) && (Action[2] == false || Action[2] == true)  && Action[3] == false && (Action[4] == false || 
     	   			Action[4] == true) && (Action[5] == false || Action[5] == true)) {
     	           escritura_final = sb.append("10\n").toString();  
     	   	}
     	   	//Action Salta + Avanza
-    	   	else if((Action[0] == true || Action[1] == true) && Action[2] == false && Action[3] == true && (Action[4] == false || 
+    	   	else if((Action[0] == true || Action[1] == true) && (Action[2] == false || Action[2] == true)  && Action[3] == true && (Action[4] == false || 
     	   			Action[4] == true) && (Action[5] == false || Action[5] == true)) {
     	           escritura_final = sb.append("11\n").toString();  
     	   	}

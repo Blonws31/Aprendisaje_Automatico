@@ -96,28 +96,10 @@ public class P1BotAgent extends BasicMarioAIAgent implements Agent {
 			fichero.write("@ATTRIBUTE celda[9][11] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[10][10] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[11][10] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[12][10] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[13][10] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[14][10] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[15][10] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[16][10] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[17][10] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[10][11] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[11][11] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[12][11] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[13][11] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[14][11] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[15][11] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[16][11] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[17][11] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[10][12] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[11][12] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[12][12] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[13][12] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[14][12] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[15][12] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[16][12] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[17][12] NUMERIC\n");
 			fichero.write("@ATTRIBUTE mario_x NUMERIC\n");
 			fichero.write("@ATTRIBUTE mario_y NUMERIC\n");
 			fichero.write("@ATTRIBUTE marioStatus NUMERIC\n");
@@ -185,24 +167,15 @@ public class P1BotAgent extends BasicMarioAIAgent implements Agent {
         }
     	miString = sb.append(String.valueOf(env[6][9])+", "+String.valueOf(env[7][9])+", "+String.valueOf(env[8][9])+", "
     			+String.valueOf(env[8][10])+", "+String.valueOf(env[9][10])+", "+String.valueOf(env[9][11])+", "
-    			+String.valueOf(env[10][10])+", "+String.valueOf(env[11][10])+", "+String.valueOf(env[12][10])+", "
-    			+String.valueOf(env[13][10])+", "+String.valueOf(env[14][10])+", "+String.valueOf(env[15][10])+", "
-    			+String.valueOf(env[16][10])+", "+String.valueOf(env[17][10])+", "
-    			+String.valueOf(env[10][11])+", "+String.valueOf(env[11][11])+", "+String.valueOf(env[12][11])+", "
-    			+String.valueOf(env[13][11])+", "+String.valueOf(env[14][11])+", "+String.valueOf(env[15][11])+", "
-    			+String.valueOf(env[16][11])+", "+String.valueOf(env[17][11])+", "
-    			+String.valueOf(env[10][12])+", "+String.valueOf(env[11][12])+", "+String.valueOf(env[12][12])+", "
-    			+String.valueOf(env[13][12])+", "+String.valueOf(env[14][12])+", "+String.valueOf(env[15][12])+", "
-    			+String.valueOf(env[16][12])+", "+String.valueOf(env[17][12])+", ").toString();
+    			+String.valueOf(env[10][10])+", "+String.valueOf(env[11][10])+", "
+    			+String.valueOf(env[10][11])+", "+String.valueOf(env[11][11])+", "
+    			+String.valueOf(env[10][12])+", "+String.valueOf(env[11][12])+", ").toString();
     	
        if(     env[8][10] == -85 || env[8][10] == -24 || env[8][10] == -62 || env[8][10] == 80 || env[8][10] == -60 ||
     		   env[9][10] == -85 || env[9][10] == -24 || env[9][10] == -62 || env[9][10] == 80 || env[9][10] == -60 ||
     		   env[9][11] == -85 || env[9][11] == -24 || env[9][11] == -62 || env[9][11] == 80 || env[9][11] == -60 ||
     		   env[10][10] == 80 || env[10][11] == 80 || ((env[6][9] == 00 || env[7][9] == 00 || env[8][9] == 00) &&
-        	   env[10][10] == 00 && env[10][11] == 00 && env[10][12] == 00 && env[11][10] == 00 && env[11][11] == 00 && env[11][12] == 00 &&
-        	   env[12][10] == 00 && env[12][11] == 00 && env[12][12] == 00 && env[13][10] == 00 && env[13][11] == 00 && env[13][12] == 00 &&
-        	   env[14][10] == 00 && env[14][11] == 00 && env[14][12] == 00 && env[15][10] == 00 && env[15][11] == 00 && env[15][12] == 00 &&
-        	   env[16][10] == 00 && env[16][11] == 00 && env[16][12] == 00 && env[17][10] == 00 && env[17][11] == 00 && env[17][12] == 00))	    
+        	   env[10][10] == 00 && env[10][11] == 00 && env[10][12] == 00 && env[11][10] == 00 && env[11][11] == 00 && env[11][12] == 00 ))	    
     		    {
     		Salto = true;
     	}

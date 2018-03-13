@@ -34,7 +34,7 @@ import java.io.*;
 import java.util.Random;
 
 public class P1BotAgent extends BasicMarioAIAgent implements Agent {
-
+	
     int tick;
 	int aux_salto = 0;
 	int mario_mode = 0;
@@ -88,9 +88,6 @@ public class P1BotAgent extends BasicMarioAIAgent implements Agent {
 		}
     	
 		try {
-			fichero.write("@ATTRIBUTE celda[6][9] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[7][9] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[8][9] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[8][10] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[9][10] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[9][11] NUMERIC\n");
@@ -130,7 +127,7 @@ public class P1BotAgent extends BasicMarioAIAgent implements Agent {
 			fichero.write("@ATTRIBUTE enemys_12 NUMERIC\n");
 			fichero.write("@ATTRIBUTE coins_24 NUMERIC\n");
 			fichero.write("@ATTRIBUTE enemys_24 NUMERIC\n");
-			fichero.write("@ATTRIBUTE ACTION {00, 01, 10, 11}\n");
+			fichero.write("@ATTRIBUTE ACTION {PARADO, SALTA, AVANZA, JUMP-ADVANCE}\n");
 			fichero.write("@data\n");
 			fichero.flush();
 		} catch (IOException e) {
@@ -163,10 +160,12 @@ public class P1BotAgent extends BasicMarioAIAgent implements Agent {
             	else if(env[mx][my] == 80) {
             		enemys++;
             	}
+            	if(env[mx][my] == 2 || env[mx][my] == 3 || env[mx][my] == 25) {
+            		env[mx][my] = 0;
+            	}
             }
         }
-    	miString = sb.append(String.valueOf(env[6][9])+", "+String.valueOf(env[7][9])+", "+String.valueOf(env[8][9])+", "
-    			+String.valueOf(env[8][10])+", "+String.valueOf(env[9][10])+", "+String.valueOf(env[9][11])+", "
+    	miString = sb.append(String.valueOf(env[8][10])+", "+String.valueOf(env[9][10])+", "+String.valueOf(env[9][11])+", "
     			+String.valueOf(env[10][10])+", "+String.valueOf(env[11][10])+", "
     			+String.valueOf(env[10][11])+", "+String.valueOf(env[11][11])+", "
     			+String.valueOf(env[10][12])+", "+String.valueOf(env[11][12])+", ").toString();
@@ -317,22 +316,22 @@ public class P1BotAgent extends BasicMarioAIAgent implements Agent {
        
        //Action PARADO
    		if(action[0] == false && action[1] == false && action[2] == false && action[3] == false && action[4] == false && action[5] == false) {
-   			escritura_final = sb.append("00\n").toString();   	
+   			escritura_final = sb.append("PARADO\n").toString();   	
    		}
 	   	//Action Salta
 	   	else if(action[0] == false && action[1] == false && action[2] == false && action[3] == true && (action[4] == false || 
 	   			action[4] == true) && (action[5] == false || action[5] == true)) {
-	           escritura_final = sb.append("01\n").toString();  
+	           escritura_final = sb.append("SALTA\n").toString();  
 	   	}
 	   	//Action Avanza
 	   	else if((action[0] == true || action[1] == true) && action[2] == false && action[3] == false && (action[4] == false || 
 	   			action[4] == true) && (action[5] == false || action[5] == true)) {
-	           escritura_final = sb.append("10\n").toString();  
+	           escritura_final = sb.append("AVANZA\n").toString();  
 	   	}
 	   	//Action Salta + Avanza
 	   	else if((action[0] == true || action[1] == true) && action[2] == false && action[3] == true && (action[4] == false || 
 	   			action[4] == true) && (action[5] == false || action[5] == true)) {
-	           escritura_final = sb.append("11\n").toString();  
+	           escritura_final = sb.append("JUMP-ADVANCE\n").toString();  
 	   	}
        return action;
     }

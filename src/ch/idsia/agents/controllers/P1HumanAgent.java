@@ -33,7 +33,7 @@ import ch.idsia.benchmark.mario.environments.Environment;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.*;
-import ch.idsia.agents.controllers.human.*;
+//import ch.idsia.agents.controllers.human.*;
 
 /**
  * Created by PLG Group.
@@ -89,9 +89,6 @@ public final class P1HumanAgent extends KeyAdapter implements Agent {
 		}
     	
 		try {
-			fichero.write("@ATTRIBUTE celda[6][9] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[7][9] NUMERIC\n");
-			fichero.write("@ATTRIBUTE celda[8][9] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[8][10] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[9][10] NUMERIC\n");
 			fichero.write("@ATTRIBUTE celda[9][11] NUMERIC\n");
@@ -131,7 +128,7 @@ public final class P1HumanAgent extends KeyAdapter implements Agent {
 			fichero.write("@ATTRIBUTE enemys_12 NUMERIC\n");
 			fichero.write("@ATTRIBUTE coins_24 NUMERIC\n");
 			fichero.write("@ATTRIBUTE enemys_24 NUMERIC\n");
-			fichero.write("@ATTRIBUTE ACTION {00, 01, 10, 11}\n");
+			fichero.write("@ATTRIBUTE ACTION {PARADO, SALTA, AVANZA, JUMP-ADVANCE}\n");
 			fichero.write("@data\n");
 			fichero.flush();
 		} catch (IOException e) {
@@ -174,10 +171,12 @@ public final class P1HumanAgent extends KeyAdapter implements Agent {
             	else if(env[mx][my] == 80) {
             		enemys++;
             	}
+            	if(env[mx][my] == 2 || env[mx][my] == 3 || env[mx][my] == 25) {
+            		env[mx][my] = 0;
+            	}
             }
         }
-        miString = sb.append(String.valueOf(env[6][9])+", "+String.valueOf(env[7][9])+", "+String.valueOf(env[8][9])+", "
-    			+String.valueOf(env[8][10])+", "+String.valueOf(env[9][10])+", "+String.valueOf(env[9][11])+", "
+        miString = sb.append(String.valueOf(env[8][10])+", "+String.valueOf(env[9][10])+", "+String.valueOf(env[9][11])+", "
     			+String.valueOf(env[10][10])+", "+String.valueOf(env[11][10])+", "
     			+String.valueOf(env[10][11])+", "+String.valueOf(env[11][11])+", "
     			+String.valueOf(env[10][12])+", "+String.valueOf(env[11][12])+", ").toString();
@@ -258,22 +257,22 @@ public final class P1HumanAgent extends KeyAdapter implements Agent {
           //Action PARADO
        		if(Action[0] == false && Action[1] == false && (Action[2] == false || Action[2] == true) && Action[3] == false && (Action[4] == false || 
        				Action[4] == true ) && (Action[5] == false || Action[5] == true)) {
-       			escritura_final = sb.append("00\n").toString();   	
+       			escritura_final = sb.append("PARADO\n").toString();   	
        		}
     	   	//Action Salta
     	   	else if(Action[0] == false && Action[1] == false && (Action[2] == false || Action[2] == true)  && Action[3] == true && (Action[4] == false || 
     	   			Action[4] == true) && (Action[5] == false || Action[5] == true)) {
-    	           escritura_final = sb.append("01\n").toString();  
+    	           escritura_final = sb.append("SALTA\n").toString();  
     	   	}
     	   	//Action Avanza
     	   	else if((Action[0] == true || Action[1] == true) && (Action[2] == false || Action[2] == true)  && Action[3] == false && (Action[4] == false || 
     	   			Action[4] == true) && (Action[5] == false || Action[5] == true)) {
-    	           escritura_final = sb.append("10\n").toString();  
+    	           escritura_final = sb.append("AVANZA\n").toString();  
     	   	}
     	   	//Action Salta + Avanza
     	   	else if((Action[0] == true || Action[1] == true) && (Action[2] == false || Action[2] == true)  && Action[3] == true && (Action[4] == false || 
     	   			Action[4] == true) && (Action[5] == false || Action[5] == true)) {
-    	           escritura_final = sb.append("11\n").toString();  
+    	           escritura_final = sb.append("JUMP-ADVANCE\n").toString();  
     	   	}
         	try {
     			fichero.write(escritura_final);

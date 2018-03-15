@@ -137,6 +137,7 @@ public class Drogoz_Bot extends BasicMarioAIAgent implements Agent {
 			e.printStackTrace();
 		}	
     }
+
     public void integrateObservation(Environment environment) {	
     	Salto = false;
     	aux_sb = new StringBuffer();
@@ -257,6 +258,26 @@ public class Drogoz_Bot extends BasicMarioAIAgent implements Agent {
         
             getAction();	
             
+            //Action PARADO
+       		if(action[0] == false && action[1] == false && action[2] == false && action[3] == false && action[4] == false && action[5] == false) {
+       			escritura_final = sb.append(prediccion_coins_24(marioState, infoEvaluacion, coins, bricks, "PARADO")+"\n").toString();  
+       		}
+    	   	//Action Salta
+    	   	else if(action[0] == false && action[1] == false && action[2] == false && action[3] == true && (action[4] == false || 
+    	   			action[4] == true) && (action[5] == false || action[5] == true)) {
+    	   		escritura_final = sb.append(prediccion_coins_24(marioState, infoEvaluacion, coins, bricks, "SALTA")+"\n").toString(); 
+    	   	}
+    	   	//Action Avanza
+    	   	else if((action[0] == true || action[1] == true) && action[2] == false && action[3] == false && (action[4] == false || 
+    	   			action[4] == true) && (action[5] == false || action[5] == true)) {
+    	   		escritura_final = sb.append(prediccion_coins_24(marioState, infoEvaluacion, coins, bricks, "AVANZA")+"\n").toString(); 
+    	   	}
+    	   	//Action Salta + Avanza
+    	   	else if((action[0] == true || action[1] == true) && action[2] == false && action[3] == true && (action[4] == false || 
+    	   			action[4] == true) && (action[5] == false || action[5] == true)) {
+    	   		escritura_final = sb.append(prediccion_coins_24(marioState, infoEvaluacion, coins, bricks, "JUMP-ADVANCE")+"\n").toString(); 
+    	   	}
+       		
         	try {
     			fichero.write(escritura_final);
     			fichero.flush();
@@ -496,5 +517,710 @@ public class Drogoz_Bot extends BasicMarioAIAgent implements Agent {
 	           escritura_final = sb.append("JUMP-ADVANCE\n").toString();  
 	   	}
        return action;
+    }
+    
+    public int prediccion_coins_24(int[] marioState, int[] infoEvaluacion, int coins, int bricks,  String Action) {
+    	int prediccion = 0;
+    	for(int i = 0; i < 5; i++) {
+    		if(bricks == i) {
+    			prediccion = 0;
+    		}
+    	}
+    	if(bricks == 5) {
+    		if(coins == 2) {
+    			if(marioState[2] == 1) {
+    				prediccion = 4;
+    			}
+    			else {
+    				prediccion = 0;
+    			}
+    		}
+    		else if(coins == 4) {
+    			prediccion = 3;
+    		}
+    		else if(coins == 6) {
+    			if(Action.equals("AVANZA")) {
+    				prediccion = 0;
+    			}
+    			else if(Action.equals("JUMP-ADVANCE")) {
+    				prediccion = 2;
+    			}
+    			else {
+    				prediccion = 4;
+    			}
+    		}
+    		else if(coins == 7) {
+    			prediccion = 3;
+    		}
+    		else {
+    			prediccion = 0;
+    		}
+    		
+    	}
+    	else if(bricks == 6) {
+    		if(coins == 0) {
+    			if(Action.equals("AVANZA")) {
+    				if(marioState[2] == 1) {
+    					prediccion = 0;
+    				}
+    				else {
+    					prediccion = 4;
+    				}
+    			}
+    			else if(Action.equals("JUMP-ADVANCE")) {
+    				prediccion = 4;
+    			}
+    			else {
+    				prediccion = 0;
+    			}
+    		}
+    		else if(coins == 1) {
+    			prediccion = 3;
+    		}
+    		else if(coins == 2 || coins == 3) {
+    			prediccion = 4;
+    		}
+    		else if(coins == 4) {
+    			if(marioState[3] == 1) {
+    				prediccion = 0;
+    			}
+    			else {
+    				if(Action.equals("JUMP-ADVANCE")) {
+    					prediccion = 2;
+    				}
+    				else {
+    					prediccion = 3;
+    				}
+    			}
+    		}
+    		else if(coins == 7) {
+    			if(marioState[1] == 0 || marioState[1] == 1) {
+    				prediccion = 0;
+    			}
+    			else {
+    				if(marioState[2] == 1) {
+    					prediccion = 3;
+    				}
+    				else {
+    					prediccion = 0;
+    				}
+    			}
+    		}
+    		else if(coins == 8) {
+    			prediccion = 5;
+    		}
+    		else if(coins == 10) {
+    			prediccion = 3;
+    		}
+    		else {
+    			prediccion = 0;
+    		}
+    	}
+    	else if(bricks == 7) {
+    		if(Action.equals("JUMP-ADVANCE")) {
+    			if(coins == 2 || coins == 4 || coins == 6) {
+    				prediccion = 4;
+    			}
+    			else {
+    				prediccion = 0;
+    			}
+    		}
+    		else {
+    			prediccion = 0;
+    		}
+    	}
+    	else if(bricks == 8) {
+    		if(coins == 0) {
+    			prediccion = 4;
+    		}
+    		else if(coins == 1 || coins == 2) {
+    			prediccion = 1;
+    		}
+    		else if(coins == 5) {
+    			if(marioState[2] == 1) {
+    				prediccion = 4;
+    			}
+    			else {
+    				prediccion = 0;
+    			}
+    		}
+    		else if(coins == 11) {
+    			if(Action.equals("PARADO") || Action.equals("SALTA")) {
+    				prediccion = 2;
+    			}
+    			else {
+    				prediccion = 0;
+    			}
+    		}
+    		else {
+    			prediccion = 0;
+    		}
+    	}
+    	else if(bricks == 9) {
+    		if(coins == 5) {
+    			if(Action.equals("AVANZA")) {
+    				prediccion = 6;
+    			}
+    			else {
+    				prediccion = 0;
+    			}
+    		}
+    		else if(coins == 6) {
+    			if(Action.equals("AVANZA")) {
+    				prediccion = 0;
+    			}
+    			else {
+    				prediccion = 5;
+    			}
+    		}
+    		else if(coins == 9 || coins == 1) {
+    			prediccion = 1;
+    		}
+    		else {
+    			prediccion = 0;
+    		}
+    	}
+    	else if(bricks == 10) {
+    		if(coins == 3) {
+    			prediccion = 6;
+    		}
+    		else if(coins == 8 || coins == 12) {
+    			prediccion = 1;
+    		}
+    		else if(coins == 14) {
+    			prediccion = 2;
+    		}
+    		else {
+    			prediccion = 0;
+    		}
+    	}
+    	else if(bricks == 11) {
+    		if(coins == 7) {
+    			prediccion = 2;
+    		}
+    		else if(coins == 8) {
+    			if(marioState[3] == 1) {
+    				prediccion = 0;
+    			}
+    			else {
+    				prediccion = 1;
+    			}
+    		}
+    		else if(coins == 10) {
+    			prediccion = 3;
+    		}
+    		else if(coins == 11) {
+    			if(marioState[1] == 0) {
+    				prediccion = 1;
+    			}
+    			else {
+    				prediccion = 2;
+    			}
+    		}
+    		else {
+    			prediccion = 0;
+    		}
+    	}
+    	else if(bricks == 12) {
+    		if(coins == 1) {
+    			prediccion = 1;
+    		}
+    		else if(coins == 3 || coins == 5) {
+    			prediccion = 6;
+    		}
+    		else if(coins == 6) {
+    			if(marioState[2] == 1) {
+    				prediccion = 6;
+    			}
+    			else {
+    				prediccion = 4;
+    			}
+    		}
+    		else if(coins == 8) {
+    			if(marioState[1] == 2) {
+    				if(marioState[3] == 1) {
+    					prediccion = 4;
+    				}
+    				else {
+    					prediccion = 6;
+    				}
+    			}
+    			else {
+    				prediccion = 3;
+    			}
+    		}
+    		else if(coins == 9) {
+    			prediccion = 3;
+    		}
+    		else if(coins == 10) {
+    			if(marioState[3] == 1) {
+    				prediccion = 4;
+    			}
+    			else {
+    				prediccion = 2;
+    			}
+    		}
+    		else if(coins == 11) {
+    			if(marioState[1] == 0) {
+    				if(Action.equals("JUMP-ADVANCE")) {
+    					prediccion = 2;
+    				}
+    				else {
+    					prediccion = 3;
+    				}
+    			}
+    		}
+    		else {
+    			prediccion = 0;
+    		}
+    	}
+    	else if(bricks == 13) {
+    		if(marioState[1] == 0) {
+    			if(coins == 11) {
+    				prediccion = 2;
+    			}
+    			else if(coins == 13) {
+    				prediccion = 0;
+    			}
+    			else {
+    				prediccion = 1;
+    			}
+    		}
+    		else if(marioState[1] == 1) {
+    			prediccion = 7;
+    		}
+    		else if(marioState[1] == 2) {
+    			if(coins == 2 || coins == 4) {
+    				prediccion = 2;
+    			}
+    			else if(coins == 5) {
+    				prediccion = 5;
+    			}
+    			else if(coins == 6 || coins == 10) {
+    				prediccion = 6;
+    			}
+    			else if(coins == 8) {
+    				if(marioState[3] == 1) {
+    					prediccion = 1;
+    				}
+    				else {
+    					prediccion = 4;
+    				}
+    			}
+    			else if(coins == 13) {
+    				prediccion = 3;
+    			}
+    			else if(coins == 18) {
+    				prediccion = 4;
+    			}
+    			else {
+    				prediccion = 0;
+    			}
+    		}
+    	}
+    	else if(bricks == 14) {
+    		if(marioState[1] == 0) {
+    			prediccion = 7;
+    		}
+    		else if(marioState[1] == 1) {
+    			prediccion = 6;
+    		}
+    		else {
+    			if(coins == 8) {
+    				prediccion = 1;
+    			}
+    			else if(coins == 10 || coins == 12) {
+    				prediccion = 4;
+    			}
+    			else if(coins == 13) {
+    				prediccion = 3;
+    			}
+    			else if(coins == 14) {
+    				if(marioState[2] == 1) {
+    					prediccion = 1;
+    				}
+    				else {
+    					prediccion = 2;
+    				}
+    			}
+    			else if(coins == 15) {
+    				prediccion = 1;
+    			}
+    			else if(coins == 16) {
+    				if(marioState[2] == 1) {
+    					prediccion = 2;
+    				}
+    				else {
+    					prediccion = 0;
+    				}
+    			}
+    			else if(coins == 15) {
+    				prediccion = 1;
+    			}
+    			else if(coins == 16) {
+    				if(marioState[2] == 1) {
+    					prediccion = 2;
+    				}
+    				else {
+    					prediccion = 0;
+    				}
+    			}
+    			else {
+    				prediccion = 0;
+    			}
+    		}
+    	}
+    	else if(bricks == 15) {
+    		if(coins == 6) {
+    			prediccion = 1;
+    		}
+    		else if(coins == 10) {
+    			if(Action.equals("PARADO") || Action.equals("SALTA")) {
+    				prediccion = 5;
+    			}
+    			else {
+    				prediccion = 0;
+    			}
+    		}
+    		else if(coins == 11) {
+    			if(marioState[2] == 1) {
+    				prediccion = 2;
+    			}
+    			else {
+    				prediccion = 6;
+    			}
+    		}
+    		else if(coins == 13 || coins == 22) {
+    			prediccion = 2;
+    		}
+    		else if(coins == 14 || coins == 18) {
+    			prediccion = 5;
+    		}
+    		else if(coins == 20) {
+    			prediccion = 4;
+    		}
+    		else {
+    			prediccion = 0;
+    		}
+    	}
+    	else if(bricks == 16) {
+    		if(coins == 6 || coins == 15 || coins == 22) {
+    			prediccion = 1;
+    		}
+    		else if(coins == 9 || coins == 10) {
+    			prediccion = 4;
+    		}
+    		else if(coins == 11) {
+    			prediccion = 6;
+    		}
+    		else {
+    			prediccion = 0;
+    		}
+    	}
+    	else if(bricks == 17) {
+    		if(marioState[2] == 1) {
+    			prediccion = 8;
+    		}
+    		else {
+    			prediccion = 0;
+    		}
+    	}
+    	else if(bricks == 18) {
+    		if(coins == 7) {
+    			prediccion = 5;
+    		}
+    		else if(coins == 11 || coins == 13) {
+    			prediccion = 2;
+    		}
+    		else if(coins == 15 || coins == 16 || coins == 18) {
+    			prediccion = 0;
+    		}
+    		else if(coins == 17) {
+    			prediccion = 4;
+    		}
+    		else {
+    			prediccion = 1;
+    		}
+    	}
+    	else if(bricks == 19) {
+    		if(Action.equals("PARADO")) {
+    			if(marioState[2] == 1) {
+    				prediccion = 7;
+    			}
+    			else {
+    				prediccion = 8;
+    			}
+    		}
+    		else if(Action.equals("SALTA")) {
+    			prediccion = 8;
+    		}
+    		else if(Action.equals("AVANZA")){
+    			if(coins == 4) {
+    				prediccion = 9;
+    			}
+    			else if(coins == 7) {
+    				if(marioState[2] == 1) {
+    					prediccion = 0;
+    				}
+    				else {
+    					prediccion = 1;
+    				}
+    			}
+    			else if(coins == 8) {
+    				prediccion = 3;
+    			}
+    			else if(coins == 9) {
+    				prediccion = 1;
+    			}
+    			else if(coins == 15) {
+    				prediccion = 2;
+    			}
+    			else if(coins == 17) {
+    				prediccion = 4;
+    			}
+    			else {
+    				prediccion = 0;
+    			}
+    		}
+    		else {
+    			if(coins == 6) {
+    				prediccion = 3;
+    			}
+    			else if(coins == 8) {
+    				prediccion = 7;
+    			}
+    			else if(coins == 10 || coins == 13 || coins == 17 || coins == 18) {
+    				prediccion = 0;
+    			}
+    			else if(coins == 16 || coins == 19) {
+    				prediccion = 2;
+    			}
+    			else {
+    				prediccion = 1;
+    			}
+    		}
+    	}
+    	else if(bricks == 20) {
+    		if(marioState[1] == 0) {
+    			prediccion = 0;
+    		}
+    		else if(marioState[1] == 1) {
+    			prediccion = 1;
+    		}
+    		else {
+    			if(marioState[2] == 1) {
+    				prediccion = 7;
+    			}
+    			else {
+    				prediccion = 2;
+    			}
+    		}
+    	}
+    	else if(bricks == 21) {
+    		if(coins == 2) {
+    			prediccion = 9;
+    		}
+    		else if(coins == 11 || coins == 16) {
+    			prediccion = 0;
+    		}
+    		else if(coins == 12) {
+    			prediccion = 6;
+    		}
+    		else if(coins == 15) {
+    			prediccion = 4;
+    		}
+    		else if(coins == 20) {
+    			prediccion = 10;
+    		}
+    		else {
+    			prediccion = 2;
+    		}
+    	}
+    	else if(bricks == 22) {
+    		if(coins == 5) {
+    			prediccion = 9;
+    		}
+    		else if(coins == 14) {
+    			prediccion = 8;
+    		}
+    		else if(coins == 16) {
+    			prediccion = 5;
+    		}
+    		else if(coins == 17 || coins == 23) {
+    			prediccion = 0;
+    		}
+    		else if(coins == 20) {
+    			prediccion = 10;
+    		}
+    		else {
+    			prediccion = 4;
+    		}
+    	}
+    	else if(bricks == 23) {
+    		if(marioState[1] == 0 || marioState[1] == 1) {
+    			prediccion = 0;
+    		}
+    		else {
+    			if(coins == 13 || coins == 15) {
+    				prediccion = 4;
+    			}
+    			else if(coins == 14 || coins == 16) {
+    				prediccion = 2;
+    			}
+    			else if(coins == 18) {
+    				prediccion = 5;
+    			}
+    			else if(coins == 20) {
+    				prediccion = 10;
+    			}
+    			else {
+    				prediccion = 6;
+    			}
+    		} 
+    	}
+    	else if(bricks == 24) {
+    		if(marioState[1] == 2) {
+    			prediccion = 5;
+    		} 
+    		else {
+    			prediccion = 0;
+    		}
+    	}
+    	else if(bricks == 25) {
+    		if(Action.equals("AVANZA")) {
+    			prediccion = 1;
+    		}
+    		else if(Action.equals("JUMP-ADVANCE")) {
+    			prediccion = 9;
+    		}
+    		else {
+    			prediccion = 4;
+    		}
+    	}
+    	else if(bricks == 26) {
+    		if(marioState[1] == 2) {
+    			prediccion = 3;
+    		}
+    		else {
+    			prediccion = 0;
+    		}
+    	}
+    	else if(bricks == 27) {
+    		if(marioState[3] == 1) {
+    			prediccion = 8;
+    		}
+    		else {
+    			prediccion = 4;
+    		}
+    	}
+    	else if(bricks == 28) {
+    		if(coins == 17 || coins == 19) {
+    			prediccion = 5;
+    		}
+    		else if(coins == 21) {
+    			prediccion = 4;
+    		}
+    		else if(coins == 22) {
+    			if(Action.equals("PARADO")) {
+    				prediccion = 1;
+    			}
+    			else if(Action.equals("SALTA")) {
+    				prediccion = 2;
+    			}
+    			else {
+    				prediccion = 0;
+    			}
+    		}
+    		else if(coins == 23) {
+    			prediccion = 1;
+    		}
+    		else if(coins == 24) {
+    			prediccion = 0;
+    		}
+    		else if(coins == 25 || coins == 26) {
+    			prediccion = 7;
+    		}
+    		else {
+    			prediccion = 2;
+    		}
+    	}
+    	else if(bricks == 29) {
+    		if(marioState[1] == 0) {
+    			prediccion = 1;
+    		}
+    		else if(marioState[1] == 1) {
+    			prediccion = 4;
+    		}
+    		else {
+    			prediccion = 6;
+    		}
+    	}
+    	else if(bricks == 30) {
+    		if(Action.equals("SALTA")) {
+				prediccion = 3;
+			}
+			else {
+				prediccion = 1;
+			}
+    	}
+    	else if(bricks == 31) {
+    		if(marioState[1] == 0) {
+    			prediccion = 2;
+    		}
+    		else if(marioState[1] == 1) {
+    			if(Action.equals("SALTA") || Action.equals("PARADO")) {
+    				prediccion = 1;
+    			}
+    			else if(Action.equals("AVANZA")) {
+    				prediccion = 2;
+    			}
+    			else {
+    				prediccion = 0;
+    			}
+    		}
+    		else {
+    			prediccion = 6;
+    		}
+    	}
+    	else if(bricks == 32) {
+    		if(marioState[2] == 1) {
+    			prediccion = 6;
+    		}
+    		else {
+    			prediccion = 0;
+    		}
+    	}
+    	else if(bricks == 33) {
+    		if(coins == 18 || coins == 22) {
+    			prediccion = 0;
+    		}
+    		else if(coins == 27) {
+    			prediccion = 5;
+    		}
+    		else if(coins == 33) {
+    			prediccion = 3;
+    		}
+    		else {
+    			prediccion = 4;
+    		}
+    	}
+    	else if(bricks == 34) {
+    		if(marioState[3] == 1) {
+    			prediccion = 6;
+    		}
+    		else {
+    			prediccion = 4;
+    		}
+    	}
+    	else if(bricks == 35) {
+    		prediccion = 5;
+    	}
+    	else if(bricks == 36) {
+    		prediccion = 5;
+    	}
+    	else if(bricks == 37) {
+    		prediccion = 5;
+    	}
+    	return prediccion;
     }
 }

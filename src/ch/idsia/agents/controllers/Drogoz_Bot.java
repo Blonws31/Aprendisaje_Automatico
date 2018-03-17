@@ -130,6 +130,7 @@ public class Drogoz_Bot extends BasicMarioAIAgent implements Agent {
 			fichero.write("@ATTRIBUTE coins_24 NUMERIC\n");
 			fichero.write("@ATTRIBUTE enemys_24 NUMERIC\n");
 			fichero.write("@ATTRIBUTE ACTION {PARADO, SALTA, AVANZA, JUMP-ADVANCE}\n");
+			fichero.write("@ATTRIBUTE prediccion_24 NUMERIC\n");
 			fichero.write("@data\n");
 			fichero.flush();
 		} catch (IOException e) {
@@ -499,22 +500,22 @@ public class Drogoz_Bot extends BasicMarioAIAgent implements Agent {
        }
        //Action PARADO
   		if(action[0] == false && action[1] == false && action[2] == false && action[3] == false && action[4] == false && action[5] == false) {
-  			escritura_final = sb.append("PARADO\n").toString();   	
+  			escritura_final = sb.append("PARADO, ").toString();   	
   		}
 	   	//Action Salta
 	   	else if(action[0] == false && action[1] == false && action[2] == false && action[3] == true && (action[4] == false || 
 	   			action[4] == true) && (action[5] == false || action[5] == true)) {
-	           escritura_final = sb.append("SALTA\n").toString();  
+	           escritura_final = sb.append("SALTA, ").toString();  
 	   	}
 	   	//Action Avanza
 	   	else if((action[0] == true || action[1] == true) && action[2] == false && action[3] == false && (action[4] == false || 
 	   			action[4] == true) && (action[5] == false || action[5] == true)) {
-	           escritura_final = sb.append("AVANZA\n").toString();  
+	           escritura_final = sb.append("AVANZA, ").toString();  
 	   	}
 	   	//Action Salta + Avanza
 	   	else if((action[0] == true || action[1] == true) && action[2] == false && action[3] == true && (action[4] == false || 
 	   			action[4] == true) && (action[5] == false || action[5] == true)) {
-	           escritura_final = sb.append("JUMP-ADVANCE\n").toString();  
+	           escritura_final = sb.append("JUMP-ADVANCE, ").toString();  
 	   	}
        return action;
     }

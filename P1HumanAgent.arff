@@ -40,6 +40,7 @@
 @ATTRIBUTE coins_24 NUMERIC
 @ATTRIBUTE enemys_24 NUMERIC
 @ATTRIBUTE Action {PARADO, SALTA, AVANZA, JUMP-ADVANCE}
+@ATTRIBUTE prediccion_24 NUMERIC
 @data
 0, 0, 0, 0, -60, 0, -60, 0, -60, 35.343258, 196.4, 2, 2, 0, 0, 1, 0, 0, 0, 0, 0, 198, 2, 35, 0, 0, 0, 1, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 0, JUMP-ADVANCE, 0
 0, 0, 0, 0, 0, 0, 0, 0, 0, 37.3755, 185.0, 2, 2, 0, 0, 1, 0, 0, 0, 0, 0, 198, 2, 37, 0, 0, 0, 1, 0, -1, 0, 0, 1, 0, 0, 0, 0, 0, 0, PARADO, 0

@@ -128,6 +128,7 @@ public class P1BotAgent extends BasicMarioAIAgent implements Agent {
 			fichero.write("@ATTRIBUTE coins_24 NUMERIC\n");
 			fichero.write("@ATTRIBUTE enemys_24 NUMERIC\n");
 			fichero.write("@ATTRIBUTE ACTION {PARADO, SALTA, AVANZA, JUMP-ADVANCE}\n");
+			fichero.write("@ATTRIBUTE prediccion_24 NUMERIC\n");
 			fichero.write("@data\n");
 			fichero.flush();
 		} catch (IOException e) {

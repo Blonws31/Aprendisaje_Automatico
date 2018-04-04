@@ -210,15 +210,15 @@ public class Drogoz_Bot extends BasicMarioAIAgent implements Agent {
         	if(mx != 3 && mx != 4 && mx != 5 && mx != 6 && mx != 7 && mx != 8 && mx != 11) {
             	miString = sb.append(String.valueOf(infoEvaluacion[mx]+", ")).toString();
         	}
+        	
         }
-        
         // Informacion del refuerzo/puntuacion que ha obtenido Mario. Nos puede servir para determinar lo bien o mal que lo esta haciendo.
         // Por defecto este valor engloba: reward for coins, killed creatures, cleared dead-ends, bypassed gaps, hidden blocks found
         int reward = environment.getIntermediateReward();
         miString = sb.append(String.valueOf(reward+", ")).toString();
         miString = sb.append(String.valueOf(coins+", "+bricks+", "+enemys+", ")).toString(); 
         
-        if(tick >= 25) {
+       if(tick >= 25) {
         	escritura_final = auxString[tick%25];
         	auxString[tick%25] = miString;
             

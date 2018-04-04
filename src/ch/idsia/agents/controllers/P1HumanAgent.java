@@ -209,7 +209,7 @@ public final class P1HumanAgent extends KeyAdapter implements Agent {
             	miString = sb.append(String.valueOf(infoEvaluacion[mx]+", ")).toString();
         	}
         }
-        
+        miString = sb.append(String.valueOf(infoEvaluacion[0]+", ")).toString();
         // Informacion del refuerzo/puntuacion que ha obtenido Mario. Nos puede servir para determinar lo bien o mal que lo esta haciendo.
         // Por defecto este valor engloba: reward for coins, killed creatures, cleared dead-ends, bypassed gaps, hidden blocks found
         int reward = environment.getIntermediateReward();

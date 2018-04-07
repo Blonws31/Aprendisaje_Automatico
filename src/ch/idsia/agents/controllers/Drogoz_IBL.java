@@ -43,11 +43,12 @@ public class Drogoz_IBL extends BasicMarioAIAgent implements Agent {
 	String [] coin_bricks = new String[25];
 	String [] arrayAuxiliar = new String[2];
 	String [] arrayInicial = new String[2];
-	static String [][] array_cluster_inicial = new String[3][300];
+	public static String [][] array_cluster_inicial = new String[3][500];
 	String miString = null;
 	String escritura_final;
 	StringBuffer aux_sb = new StringBuffer();
 	StringBuffer sb = new StringBuffer();
+	static int []cont_cluster = new int [3];
 	
     public Drogoz_IBL() {
         super("BaselineAgent");
@@ -67,26 +68,29 @@ public class Drogoz_IBL extends BasicMarioAIAgent implements Agent {
     	int cluster_no_danger = 0;
     	int cluster_moneda = 0;
     	try {
-			fichero = new BufferedWriter(new FileWriter("Drogoz_IBL.arff", true));
-			Cluster_Inicial=new BufferedReader(new FileReader("P2HumanAgent.arff"));
+			Cluster_Inicial=new BufferedReader(new FileReader("cluster.txt"));
 			String linea = Cluster_Inicial.readLine();
 			while(linea != null) {
 				String [] parts_inicio = linea.split(", ");
-				
-				if(parts_inicio[20].equals("peligro") ) {
+				if(parts_inicio[19].equals("peligro") ) {
 					array_cluster_inicial[0][cluster_peligro] = linea; 
 					cluster_peligro++;
 				}
-				else if(parts_inicio[20].equals("no_danger") ) {
+				else if(parts_inicio[19].equals("no_danger") ) {
 					array_cluster_inicial[1][cluster_no_danger] = linea; 
 					cluster_no_danger++;
 				}
 				else {
-					array_cluster_inicial[0][cluster_moneda] = linea; 
+					array_cluster_inicial[2][cluster_moneda] = linea;
 					cluster_moneda++;
 				}
 				linea = Cluster_Inicial.readLine();
 			}
+			cont_cluster[0] = cluster_peligro;
+			cont_cluster[1] = cluster_no_danger;
+			cont_cluster[2] = cluster_moneda;
+			
+			fichero = new BufferedWriter(new FileWriter("Drogoz_IBL.arff", true));
 			String sFichero = "Drogoz_IBL.arff";
 			File fichero = new File (sFichero);
 			if(fichero.length() == 0) {
@@ -141,6 +145,9 @@ public void integrateObservation(Environment environment) {
 	int foso = 0;
 	int obstaculo = 0;
 	int enemys = 0;
+    miString = null;
+    escritura_final = null;
+    aux_sb = null;
    	aux_sb = new StringBuffer();
    	sb = new StringBuffer();
        
@@ -222,10 +229,10 @@ public void integrateObservation(Environment environment) {
     	escritura_final = sb.append(String.valueOf(infoEvaluacion[11]+", ")).toString();
         coin_bricks[tick%25] = aux_sb.append(String.valueOf(infoEvaluacion[10])).toString();
    		
-        getAction();
-        
         int reward = environment.getIntermediateReward();
-        miString = sb.append(String.valueOf(reward+", ")).toString();
+        escritura_final = sb.append(String.valueOf(reward+", ")).toString();
+        
+        getAction();
 
 	    //action PARADO
         if(action[0] == false && action[1] == false && (action[2] == false || action[2] == true) && action[3] == false && (action[4] == false || 
@@ -290,9 +297,6 @@ public void integrateObservation(Environment environment) {
 			coin_bricks[tick] = aux_sb.append(String.valueOf(infoEvaluacion[10])).toString();
 		}
     tick++;
-    miString = null;
-    escritura_final = null;
-    aux_sb = null;
 } 
     
     public boolean[] getAction() {
@@ -327,8 +331,9 @@ public void integrateObservation(Environment environment) {
 	int cluster_peligro = 0;
 	int cluster_no_danger = 0;
 	int cluster_moneda = 0;
+	
 	for(int i = 0; i < 3; i++ ) {
-		for(int j = 0 ; j < array_cluster_inicial[i].length; j++) {
+		for(int j = 0 ; j < cont_cluster[i]-1; j++) {
 			String [] parts_linea = array_cluster_inicial[i][j].split(", ");
 			double euclidean = euclidean(parts_linea,parts_escritura_final);
 			if(primero >= euclidean) {
@@ -347,30 +352,30 @@ public void integrateObservation(Environment environment) {
 	}
 
 	String [] cluster_final = primer_string.split(", ");
-	if(cluster_final[20].equals("peligro") ) {
+	if(cluster_final[19].equals("peligro") ) {
 		cluster_peligro++;
 	}
-	else if(cluster_final[20].equals("no_danger") ) {
+	else if(cluster_final[19].equals("no_danger") ) {
 		cluster_no_danger++;
 	}
 	else {
 		cluster_moneda++;
 	}
 	cluster_final = segundo_string.split(", ");
-	if(cluster_final[20].equals("cluster0") ) {
+	if(cluster_final[19].equals("peligro") ) {
 		cluster_peligro++;
 	}
-	else if(cluster_final[20].equals("cluster1") ) {
+	else if(cluster_final[19].equals("no_danger") ) {
 		cluster_no_danger++;
 	}
 	else {
 		cluster_moneda++;
 	}
 	cluster_final = tercer_string.split(", ");
-	if(cluster_final[20].equals("cluster0") ) {
+	if(cluster_final[19].equals("peligro") ) {
 		cluster_peligro++;
 	}
-	else if(cluster_final[20].equals("cluster1") ) {
+	else if(cluster_final[19].equals("no_danger") ) {
 		cluster_no_danger++;
 	}
 	else {
@@ -381,41 +386,34 @@ public void integrateObservation(Environment environment) {
 	if(cluster_peligro < cluster_no_danger && cluster_moneda < cluster_no_danger) {
 		System.out.println("Cluster No Danger\n");
 	}
-	if(cluster_peligro < cluster_moneda && cluster_moneda < cluster_moneda) {
+	else if(cluster_peligro < cluster_moneda && cluster_moneda < cluster_moneda) {
 		System.out.println("Cluster Moneda\n");
 	}
 	else {
 		System.out.println("Cluster Peligro\n");
 	}
-       
-	//action PARADO
-    if(action[0] == false && action[1] == false && (action[2] == false || action[2] == true) && action[3] == false && (action[4] == false || 
-				action[4] == true ) && (action[5] == false || action[5] == true)) {
-    	escritura_final = sb.append("PARADO\n").toString();   
-		}
-   	//action Salta
-    else if(action[0] == false && action[1] == false && (action[2] == false || action[2] == true)  && action[3] == true && (action[4] == false || 
-   			action[4] == true) && (action[5] == false || action[5] == true)) {
-    	escritura_final = sb.append("SALTA\n").toString();   
    	}
-   	//action Avanza
-    else if((action[0] == true || action[1] == true) && (action[2] == false || action[2] == true)  && action[3] == false && (action[4] == false || 
-   			action[4] == true) && (action[5] == false || action[5] == true)) {
-    	escritura_final = sb.append("AVANZA\n").toString();   
-   	}
-   	//action Salta + Avanza
-    else if((action[0] == true || action[1] == true) && (action[2] == false || action[2] == true)  && action[3] == true && (action[4] == false || 
-   			action[4] == true) && (action[5] == false || action[5] == true)) {
-    	escritura_final = sb.append("JUMP-ADVANCE\n").toString();  
-   	}
-   	}
-       return action;
+    return action;
     }
     
     public static double euclidean(String[] x, String[] y){ 
         double sum = 0; 
-        for (int i=0; i< 17; i++){ 
-            sum += Math.pow(Integer.parseInt(x[i]) - Integer.parseInt(y[i]), 2); 
+        int peso = 1;
+        for (int i=0; i<= 17; i++){
+        	//System.out.println("Inicio "+x[17]+" Final: "+y[17]);
+        	if(i <= 8 || i == 10 || i == 15 || i == 16) {
+        		peso = 1;
+        	}
+        	else if(i == 9 || i == 11 || i == 13 || i == 17) {
+        		peso = 2;
+        	}
+        	else if(i == 14) {
+        		peso = 3;
+        	}
+        	else if(i == 12) {
+        		peso = 4;
+        	}
+            sum += peso*(Math.pow(Integer.parseInt(x[i]) - Integer.parseInt(y[i]), 2)); 
         }      
         return Math.sqrt(sum); 
     } 

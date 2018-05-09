@@ -102,12 +102,15 @@ public class P2BotAgent extends BasicMarioAIAgent implements Agent {
 			fichero.write("@ATTRIBUTE marioMode NUMERIC\n");
 			fichero.write("@ATTRIBUTE coins NUMERIC\n");
 			fichero.write("@ATTRIBUTE coinsGained NUMERIC\n");
+			fichero.write("@ATTRIBUTE distancePassedCells NUMERIC\n");
 			fichero.write("@ATTRIBUTE foso {1, 0}\n");
 			fichero.write("@ATTRIBUTE obstaculo {1, 0}\n");
-			fichero.write("@ATTRIBUTE coins_12 NUMERIC\n");
+			fichero.write("@ATTRIBUTE enemys {1, 0}\n");
 			fichero.write("@ATTRIBUTE coins_24 NUMERIC\n");
 			fichero.write("@ATTRIBUTE timeLeft NUMERIC\n");
+			fichero.write("@ATTRIBUTE reward NUMERIC\n");
 			fichero.write("@ATTRIBUTE ACTION {PARADO, SALTA, AVANZA, JUMP-ADVANCE}\n");
+			fichero.write("@ATTRIBUTE cluster STRING\n");
 			fichero.write("@data\n");
 			fichero.flush();
 		} catch (IOException e) {
@@ -117,7 +120,10 @@ public class P2BotAgent extends BasicMarioAIAgent implements Agent {
     }
     
 public void integrateObservation(Environment environment) {	
-       	Salto = false;
+		int foso = 0;
+		int obstaculo = 0;
+		int enemys = 0;
+		Salto = false;
        	aux_sb = new StringBuffer();
        	sb = new StringBuffer();
            
@@ -133,7 +139,7 @@ public void integrateObservation(Environment environment) {
        			if(env[mx][my] == 2) {
        				coins++;
        			}
-       			if(env[mx][my] == 2 || env[mx][my] == 3 || env[mx][my] == 25) {
+       			if(env[mx][my] == 3 || env[mx][my] == 25) {
        				env[mx][my] = 0;
        			}
        		}
@@ -143,63 +149,46 @@ public void integrateObservation(Environment environment) {
        			+String.valueOf(env[10][11])+", "+String.valueOf(env[11][11])+", "
        			+String.valueOf(env[10][12])+", "+String.valueOf(env[11][12])+", ").toString();
        	
-          if(     env[8][10] == -85 || env[8][10] == -24 || env[8][10] == -62 || env[8][10] == 80 || env[8][10] == -60 ||
-       		   env[9][10] == -85 || env[9][10] == -24 || env[9][10] == -62 || env[9][10] == 80 || env[9][10] == -60 ||
-       		   env[9][11] == -85 || env[9][11] == -24 || env[9][11] == -62 || env[9][11] == 80 || env[9][11] == -60 ||
-       		   env[10][10] == 80 || env[10][11] == 80 || ((env[6][9] == 00 || env[7][9] == 00 || env[8][9] == 00) &&
-           	   env[10][10] == 00 && env[10][11] == 00 && env[10][12] == 00 && env[11][10] == 00 && env[11][11] == 00 && env[11][12] == 00 ))	    
-       		    {
-       				Salto = true;
-       				foso = 1;
-       				obstaculo = 1;
-       		    }
-          else {
-        	  foso = 0;
-        	  obstaculo = 0;
-          }
+        // Foso
+        if(((env[6][9] == 00 || env[7][9] == 00 || env[8][9] == 00) && env[10][10] == 00 && env[10][11] == 00 && env[10][12] == 00 && env[11][10] == 00 
+        		&& env[11][11] == 00 && env[11][12] == 00 )) {
+        	foso = 1;
+        	Salto = true;
+        }
+        // Obstaculo -24 -60 -62 -85 
+        if( env[8][10] == -85 || env[8][10] == -24 || env[8][10] == -62 || env[8][10] == -60 ||
+     		   env[9][10] == -85 || env[9][10] == -24 || env[9][10] == -62 || env[9][10] == -60 ||
+     		   env[9][11] == -85 || env[9][11] == -24 || env[9][11] == -62 || env[9][11] == -60) {
+        	obstaculo = 1;
+        	Salto = true;
+        }
+        // Enemy 80
+        if(env[8][10] == 80 || env[9][10] == 80 || env[9][11] == 80 ||  env[10][10] == 80 || env[10][11] == 80) {
+        	enemys = 1;
+        	Salto = true;
+        }
             
            // Estado de mario
            // marioStatus, marioMode, isMarioOnGround (1 o 0), isMarioAbleToJump() (1 o 0), isMarioAbleToShoot (1 o 0), 
            // isMarioCarrying (1 o 0), killsTotal, killsByFire,  killsByStomp, killsByShell, timeLeft
-           int[] marioState;
-           marioState = environment.getMarioState();
-           for (int mx = 0; mx < marioState.length; mx++) {
-           	if(marioState[1] == 2)
-           		mario_mode = 2;
-           	else
-           		mario_mode = 0;
-           	if(mx == 1) {
-           		miString = sb.append(String.valueOf(marioState[1]+", ")).toString(); 
-           	}
-           }
+        int[] marioState;
+        marioState = environment.getMarioState();
+   		miString = sb.append(String.valueOf(marioState[1]+", ")).toString(); 
+   		mario_mode= marioState[1];
+        miString = sb.append(String.valueOf(coins+", ")).toString(); 
            
-           miString = sb.append(String.valueOf(coins+", ")).toString(); 
 
            // Mas informacion de evaluacion...
            // distancePassedCells, distancePassedPhys, flowersDevoured, killsByFire, killsByShell, killsByStomp, killsTotal, marioMode,
            // marioStatus, mushroomsDevoured, coinsGained, timeLeft, timeSpent, hiddenBlocksFound
-           int[] infoEvaluacion;
-           infoEvaluacion = environment.getEvaluationInfoAsInts();
-           for (int mx = 0; mx < infoEvaluacion.length; mx++){
-           	if(mx == 10) {
-               	miString = sb.append(String.valueOf(infoEvaluacion[10]+", ")).toString();
-           	}
-           }
-           
-          miString = sb.append(String.valueOf(foso+", "+obstaculo+", ")).toString();
+        int[] infoEvaluacion;
+        infoEvaluacion = environment.getEvaluationInfoAsInts();
+		miString = sb.append(String.valueOf(infoEvaluacion[10]+", ")).toString();
+        miString = sb.append(String.valueOf(infoEvaluacion[0]+", ")).toString();   
+          miString = sb.append(String.valueOf(foso+", "+obstaculo+", "+enemys+", ")).toString();
           if(tick >= 25) { 
         	escritura_final = auxString[tick%25];
         	auxString[tick%25] = miString;
-        	
-        	if((tick%25)+12 < 25) {
-            	arrayAuxiliar = coin_bricks[((tick%25)+6)].split(", ");
-            	arrayInicial = coin_bricks[(tick%25)].split(", ");
-            }
-            else {
-            	arrayAuxiliar = coin_bricks[((tick%25)+12)%25].split(", ");
-            	arrayInicial = coin_bricks[(tick%25)].split(", ");
-            }
-        	escritura_final = sb.append((Integer.parseInt(arrayAuxiliar[0]) -Integer.parseInt(arrayInicial[0]))+", ").toString();
         	
         	if((tick%25)+24 < 25) {
             	arrayAuxiliar = coin_bricks[((tick%25)+24)].split(", ");
@@ -213,8 +202,30 @@ public void integrateObservation(Environment environment) {
         	escritura_final = sb.append(String.valueOf(infoEvaluacion[11]+", ")).toString();
             coin_bricks[tick%25] = aux_sb.append(String.valueOf(infoEvaluacion[10])).toString();
        		
+            int reward = environment.getIntermediateReward();
+            escritura_final = sb.append(String.valueOf(reward+", ")).toString();
+            
             getAction();
             
+            // Cluster no_danger, Peligro, Moneda
+            
+            // Peligro
+            if(     env[8][10] == -85 || env[8][10] == -24 || env[8][10] == -62 || env[8][10] == 80 || env[8][10] == -60 ||
+         		   env[9][10] == -85 || env[9][10] == -24 || env[9][10] == -62 || env[9][10] == 80 || env[9][10] == -60 ||
+         		   env[9][11] == -85 || env[9][11] == -24 || env[9][11] == -62 || env[9][11] == 80 || env[9][11] == -60 ||
+         		   env[10][10] == 80 || env[10][11] == 80 || ((env[6][9] == 00 || env[7][9] == 00 || env[8][9] == 00) &&
+             	   env[10][10] == 00 && env[10][11] == 00 && env[10][12] == 00 && env[11][10] == 00 && env[11][11] == 00 && env[11][12] == 00 ))	    
+         		    {
+            	escritura_final = sb.append("peligro\n").toString();  
+         	}
+            // Moneda
+            else if(env[6][9] == 2 || env[7][9] == 2 || env[8][9] == 2 || env[8][10] == 2 || env[9][10] == 2) {
+            	escritura_final = sb.append("moneda\n").toString();  
+            }
+            // no_danger 
+            else {
+            	escritura_final = sb.append("no_danger\n").toString();  
+            }
         	try {
     			fichero.write(escritura_final);
     			fichero.flush();
@@ -275,22 +286,22 @@ public void integrateObservation(Environment environment) {
        
         //Action PARADO
    		if(action[0] == false && action[1] == false && action[2] == false && action[3] == false && action[4] == false && action[5] == false) {
-   			escritura_final = sb.append("PARADO\n").toString();   	
+   			escritura_final = sb.append("PARADO, ").toString();   	
    		}
 	   	//Action Salta
 	   	else if(action[0] == false && action[1] == false && action[2] == false && action[3] == true && (action[4] == false || 
 	   			action[4] == true) && (action[5] == false || action[5] == true)) {
-	           escritura_final = sb.append("SALTA\n").toString();  
+	           escritura_final = sb.append("SALTA, ").toString();  
 	   	}
 	   	//Action Avanza
 	   	else if((action[0] == true || action[1] == true) && action[2] == false && action[3] == false && (action[4] == false || 
 	   			action[4] == true) && (action[5] == false || action[5] == true)) {
-	           escritura_final = sb.append("AVANZA\n").toString();  
+	           escritura_final = sb.append("AVANZA, ").toString();  
 	   	}
 	   	//Action Salta + Avanza
 	   	else if((action[0] == true || action[1] == true) && action[2] == false && action[3] == true && (action[4] == false || 
 	   			action[4] == true) && (action[5] == false || action[5] == true)) {
-	           escritura_final = sb.append("JUMP-ADVANCE\n").toString();  
+	           escritura_final = sb.append("JUMP-ADVANCE, ").toString();  
 	   	}
        return action;
     }

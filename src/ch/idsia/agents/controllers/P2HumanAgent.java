@@ -70,7 +70,7 @@ public final class P2HumanAgent extends KeyAdapter implements Agent {
 			String sFichero = "P2HumanAgent.arff";
 			File fichero = new File (sFichero);
 			if(fichero.length() == 0) {
-				//Cabecera_ARFF();
+				Cabecera_ARFF();
 			}
 			//fichero.close();
 		} catch (IOException e) {
@@ -101,6 +101,7 @@ public final class P2HumanAgent extends KeyAdapter implements Agent {
 			fichero.write("@ATTRIBUTE marioMode NUMERIC\n");
 			fichero.write("@ATTRIBUTE coins NUMERIC\n");
 			fichero.write("@ATTRIBUTE coinsGained NUMERIC\n");
+			fichero.write("@ATTRIBUTE distancePassedCells NUMERIC\n");
 			fichero.write("@ATTRIBUTE foso {1, 0}\n");
 			fichero.write("@ATTRIBUTE obstaculo {1, 0}\n");
 			fichero.write("@ATTRIBUTE enemys {1, 0}\n");
@@ -189,12 +190,11 @@ public final class P2HumanAgent extends KeyAdapter implements Agent {
            // marioStatus, mushroomsDevoured, coinsGained, timeLeft, timeSpent, hiddenBlocksFound
            int[] infoEvaluacion;
            infoEvaluacion = environment.getEvaluationInfoAsInts();
-           for (int mx = 0; mx < infoEvaluacion.length; mx++){
-           	if(mx == 10) {
-               	miString = sb.append(String.valueOf(infoEvaluacion[10]+", ")).toString();
-           	}
-           }
-           
+          
+            miString = sb.append(String.valueOf(infoEvaluacion[10]+", ")).toString();
+			miString = sb.append(String.valueOf(infoEvaluacion[0]+", ")).toString(); 
+           	
+			
           miString = sb.append(String.valueOf(foso+", "+obstaculo+", "+enemys+", ")).toString();
           if(tick >= 25) { 
         	escritura_final = auxString[tick%25];
@@ -215,7 +215,7 @@ public final class P2HumanAgent extends KeyAdapter implements Agent {
             getAction();
             
             int reward = environment.getIntermediateReward();
-            miString = sb.append(String.valueOf(reward+", ")).toString();
+            escritura_final = sb.append(String.valueOf(reward+", ")).toString();
 
 		    //Action PARADO
             if(Action[0] == false && Action[1] == false && (Action[2] == false || Action[2] == true) && Action[3] == false && (Action[4] == false || 

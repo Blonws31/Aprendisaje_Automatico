@@ -204,32 +204,32 @@ public final class P3HumanAgent extends KeyAdapter implements Agent {
 		    //Action PARADO
             if(Action[0] == false && Action[1] == false && (Action[2] == false || Action[2] == true) && Action[3] == false && (Action[4] == false || 
        				Action[4] == true ) && (Action[5] == false || Action[5] == true)) {
-            	escritura_final = escritura_final + "PARADO, ";
+            	escritura_final = escritura_final + "0, ";
        		}
     	   	//Action SALTA
             else if(Action[0] == false && Action[1] == false && (Action[2] == false || Action[2] == true)  && Action[3] == true && (Action[4] == false || 
     	   			Action[4] == true) && (Action[5] == false || Action[5] == true)) {
-            	escritura_final = escritura_final + "SALTA, ";
+            	escritura_final = escritura_final + "1, ";
    	   		}
     	   	//Action AVANZA DERECHA
             else if((Action[1] == true) && (Action[2] == false || Action[2] == true)  && Action[3] == false && (Action[4] == false || 
     	   			Action[4] == true) && (Action[5] == false || Action[5] == true)) {
-            	escritura_final = escritura_final + "AVANZA, ";
+            	escritura_final = escritura_final + "2, ";
             }
             //Action RETROCEDE IZQUIERDA
             else if((Action[0] == true) && (Action[2] == false || Action[2] == true)  && Action[3] == false && (Action[4] == false || 
         	   		Action[4] == true) && (Action[5] == false || Action[5] == true)) {
-                	escritura_final = escritura_final + "RETROCEDE, ";
+                	escritura_final = escritura_final + "3, ";
         	}
     	   	//Action SALTA + DERECHA
             else if((Action[1] == true) && (Action[2] == false || Action[2] == true)  && Action[3] == true && (Action[4] == false || 
     	   			Action[4] == true) && (Action[5] == false || Action[5] == true)) {
-            	escritura_final = escritura_final + "JUMP-RIGHT, ";
+            	escritura_final = escritura_final + "4, ";
     	   	}
           //Action SALTA + IZQUIERDA
             else if((Action[0] == true) && (Action[2] == false || Action[2] == true)  && Action[3] == true && (Action[4] == false || 
     	   			Action[4] == true) && (Action[5] == false || Action[5] == true)) {
-            	escritura_final = escritura_final + "JUMP-LEFT, ";
+            	escritura_final = escritura_final + "5, ";
     	   	}
             escritura_final = escritura_final + miString ;
             
@@ -253,23 +253,23 @@ public final class P3HumanAgent extends KeyAdapter implements Agent {
             }
             // Pozo
             if( foso == 1 )	{
-            	escritura_final = escritura_final + "foso\n";
+            	escritura_final = escritura_final + "0\n";
          	}
             //Enemigo
             else if( enemys == 1 ) {
-            	escritura_final = escritura_final + "enemigo\n";
+            	escritura_final = escritura_final + "1\n";
           	}
             //Obstaculo
             else if( obstaculo == 1 ) {
-            	escritura_final = escritura_final + "obstaculo\n";
+            	escritura_final = escritura_final + "2\n";
           	}
             // Moneda
             else if( moneda == 1 ) {
-            	escritura_final = escritura_final + "moneda\n";
+            	escritura_final = escritura_final + "3\n";
             }
             // no_danger 
             else {
-            	escritura_final = escritura_final + "no_danger\n";
+            	escritura_final = escritura_final + "4\n";
             }
    			mario_mode[tick%25] = marioState[1];
    			coins_ganed[tick%25] = infoEvaluacion[10];

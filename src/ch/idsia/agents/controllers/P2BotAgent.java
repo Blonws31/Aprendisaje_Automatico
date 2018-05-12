@@ -271,7 +271,7 @@ public void integrateObservation(Environment environment) {
 		   action[4] = false;
 	   
        if(Salto == true) {
-    	   if(aux_salto == 0) {
+    	   if(aux_salto >= 0) {
     		   action[3] = true;
     		   aux_salto++;
     	   }

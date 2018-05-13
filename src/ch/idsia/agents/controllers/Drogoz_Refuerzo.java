@@ -46,6 +46,7 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
     static QLearning ql = new QLearning(0, 0.8, 0.2, estados, acciones, 5, 6);
 
     int tick;
+    int aux_tick;
     int estado_mario = 0;
     int distancia_recorrida = -1;
     int distancia_final = -1;
@@ -57,7 +58,8 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
     int ciclosMaximos   = 5;
     int ciclos          = 0;
 
-    int aux_salto = 0;
+    int [] salto_array = new int [6] ;
+    		
     boolean Salto;
 
 	double[] estado = {0};
@@ -219,15 +221,18 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
     // Obstaculo -24 -60 -62 -85 
     if( env[8][10] == -85 || env[8][10] == -24 || env[8][10] == -62 || env[8][10] == -60 ||
    		   env[9][10] == -85 || env[9][10] == -24 || env[9][10] == -62 || env[9][10] == -60 ||
-   		   env[9][11] == -85 || env[9][11] == -24 || env[9][11] == -62 || env[9][11] == -60) {
+   		   env[9][11] == -85 || env[9][11] == -24 || env[9][11] == -62 || env[9][11] == -60 ||
+   		   (env[6][10] == -24  && env[9][10] == -24) || (env[7][10] == -24  && env[10][10] == -24) ||
+   		   (env[8][10] == -24  && env[11][9] == -24) || (env[9][10] == -24  && env[12][9] == -24)) {
     	obstaculo = 1;
     	Salto = true;
     }
+    //moneda
     if( env[8][10] == 2 || env[9][10] == 2 || env[9][11] == 2) {
     	moneda = 1;
     }
     // Enemy 80
-    if(env[8][10] == 80 || env[9][10] == 80 || env[9][11] == 80 || env[10][10] == 80 || env[10][11] == 80)  {
+    if(env[8][10] == 80 || env[9][8] == 80 || env[9][9] == 80 || env[9][10] == 80)  {
     	enemys = 1;
     	Salto = true;
     }
@@ -255,7 +260,9 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
     	auxString[tick%25] = miString;
     	
     	escritura_final = sb.append(String.valueOf(infoEvaluacion[11]+", ")).toString();
-     
+        aux_tick = tick;
+        distancia_recorrida = infoEvaluacion[0];
+
         getAction();
 
 	    //action PARADO
@@ -329,35 +336,40 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
     
     
     public boolean[] getAction() {
+    	if(aux_tick == tick) {
 
-	    if(tick >= 25) { 
-	    	// 0 = "pozo", 1 = "enemigo", 2 = "obstaculo", 3 = "moneda", 4 = "no_danger"};
-	    	// Pozo
+	    	// 0 = "foso", 1 = "enemigo", 2 = "obstaculo", 3 = "moneda", 4 = "no_danger"};
+	    	// Foso
 	        if( foso == 1 )	{
 	        	estado[0] = 0;
-	        	 accion      = ql.obtenerMejorAccion(estado);
+	        	 accion = ql.obtenerMejorAccion(estado);
+	        	 System.out.println("Foso :"+tick);
 	     	}
 	        //Enemigo
 	        else if( enemys == 1 ) {
 	        	estado[0] = 1;
-	        	 accion      = ql.obtenerMejorAccion(estado);
+	        	 accion = ql.obtenerMejorAccion(estado);
+	        	 System.out.println("Enemy :"+tick);
 	      	}
 	        //Obstaculo
 	        else if( obstaculo == 1 ) {
 	        	estado[0] = 2;
-	        	 accion      = ql.obtenerMejorAccion(estado);
+	        	 accion = ql.obtenerMejorAccion(estado);
+	        	 System.out.println("Obstaculo :"+tick);
 	      	}
 	        // Moneda
 	        else if( moneda == 1 ) {
 	        	 estado[0] = 3;
-	        	 accion      = ql.obtenerMejorAccion(estado);
+	        	 accion = ql.obtenerMejorAccion(estado);
+	        	 System.out.println("Moneda :"+tick);
 	        }
 	        // no_danger 
 	        else {
 	        	estado[0] = 4;
-	        	 accion      = ql.obtenerMejorAccion(estado);
+	        	 accion = ql.obtenerMejorAccion(estado);
+	        	 System.out.println("No_danger :"+tick);
 	        }
-	   	}
+
 	 // La accion es un array de booleanos de dimension 6
         // action[Mario.KEY_LEFT] Mueve a Mario a la izquierda
         // action[Mario.KEY_RIGHT] Mueve a Mario a la derecha
@@ -382,13 +394,13 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
 	    	action[1] = false;
 	        action[2] = false;
 	        if(Salto == true) {
-	        	if(aux_salto >= 0 && aux_salto <= 3) {
+	        	if(salto_array[1] >= 0 && salto_array[1] <= 6) {
 		     		   action[3] = true;
-		     		   aux_salto++;
+		     		   salto_array[1]++;
 		     	   }
 		     	   else{
 		     		   action[3] = false;
-		     		   aux_salto = 0;
+		     		   salto_array[1] = 0;
 		     	   }		   
 	        }
 	        action[4] = false;
@@ -430,14 +442,14 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
 	    	action[0] = false;
 	    	action[1] = true;
 	        action[2] = false;
-	        if(Salto == true) {
-	     	   if(aux_salto >= 0 && aux_salto <= 3) {
+	        if(Salto == true ) {
+	     	   if(salto_array[4] >= 0 && salto_array[4] <= 6) {
 	     		   action[3] = true;
-	     		   aux_salto++;
+	     		   salto_array[4]++;
 	     	   }
 	     	   else{
 	     		   action[3] = false;
-	     		   aux_salto = 0;
+	     		   salto_array[4] = 0;
 	     	   }	   
 	        }
 	        if(estado_mario == 2) {
@@ -455,13 +467,13 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
 	    	action[1] = false;
 	        action[2] = false;
 	        if(Salto == true) {
-	        	if(aux_salto >= 0 && aux_salto <= 3) {
+	        	if(salto_array[5] >= 0 && salto_array[5] <= 6) {
 		     		   action[3] = true;
-		     		   aux_salto++;
+		     		   salto_array[5]++;
 		     	   }
 		     	   else{
 		     		   action[3] = false;
-		     		   aux_salto = 0;
+		     		   salto_array[5] = 0;
 		     	   }		   
 	        }
 	        if(estado_mario == 2) {
@@ -473,7 +485,9 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
 	        action[5] = false;
 	    }
 	    
-	    return action;
+       }   
+       distancia_final = distancia_recorrida;
+       return action;
 	}
      
 }

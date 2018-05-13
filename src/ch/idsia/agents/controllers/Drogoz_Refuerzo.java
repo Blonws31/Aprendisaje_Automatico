@@ -48,8 +48,6 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
     int tick;
     int aux_tick;
     int estado_mario = 0;
-    int distancia_recorrida = -1;
-    int distancia_final = -1;
     
 	int foso;
 	int obstaculo;
@@ -250,7 +248,6 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
        // marioStatus, mushroomsDevoured, coinsGained, timeLeft, timeSpent, hiddenBlocksFound
        int[] infoEvaluacion;
        infoEvaluacion = environment.getEvaluationInfoAsInts();
-       distancia_recorrida = infoEvaluacion[0];
        miString = sb.append(String.valueOf(infoEvaluacion[10]+", ")).toString();
 	   miString = sb.append(String.valueOf(infoEvaluacion[0]+", ")).toString(); 
        
@@ -261,7 +258,6 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
     	
     	escritura_final = sb.append(String.valueOf(infoEvaluacion[11]+", ")).toString();
         aux_tick = tick;
-        distancia_recorrida = infoEvaluacion[0];
 
         getAction();
 
@@ -486,7 +482,6 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
 	    }
 	    
        }   
-       distancia_final = distancia_recorrida;
        return action;
 	}
      

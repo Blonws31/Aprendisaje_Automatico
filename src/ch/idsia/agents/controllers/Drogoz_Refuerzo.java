@@ -66,10 +66,8 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
     private Random R = null;
     static BufferedWriter fichero = null;  
     static BufferedReader Cluster_Inicial = null;
-    static int datos_fichero = 1377;
+    static int datos_fichero = 929;
 	public static String [] array_tuplas_inicial = new String[datos_fichero];
-	public static String [] array_tuplas_final = new String[datos_fichero];
-    static int []cont_cluster = new int [5];
 
 	String [] auxString = new String[25];
 	String [] arrayInicial = new String[2];
@@ -110,20 +108,17 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
 			if(fichero.length() == 0) {
 				//Cabecera_ARFF();
 			}
-			//fichero.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}    
     }
     
     public void Tuplas() {
-
-    	for(int i=0; i<493;i++) {
-    		if(i != 492) {
+    	
+    	for(int i=0; i<datos_fichero;i++) {
+    		if(i != datos_fichero-1) {
     			String [] parts_inicio = array_tuplas_inicial[i].split(", ");
         		String [] parts_final = array_tuplas_inicial[(i+1)].split(", ");
-        		array_tuplas_final[i] = sb.append(String.valueOf(parts_inicio[36]+", "+parts_inicio[17]+", "+parts_final[36]+", "+parts_inicio[35])).toString();
         		mapa.add(new Tupla(Double.parseDouble(parts_inicio[36]), Double.parseDouble(parts_inicio[17]), 
         				Double.parseDouble(parts_final[36]), Double.parseDouble(parts_inicio[35]))); 
     		}	
@@ -134,7 +129,7 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
                 ql.actualizarTablaQ(mapa.get(i));
             ciclos++;
         }
-    	ql.mostrarTablaQ();
+    	//ql.mostrarTablaQ();
     }
     
     
@@ -143,7 +138,6 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
 			fichero.write("@RELATION Drogoz_Refuerzo\n\n");
 			fichero.flush();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
     	
@@ -172,7 +166,6 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
 			fichero.write("@data\n");
 			fichero.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
     }
@@ -252,7 +245,7 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
 	   miString = sb.append(String.valueOf(infoEvaluacion[0]+", ")).toString(); 
        
        miString = sb.append(String.valueOf(foso+", "+obstaculo+", "+enemys+", ")).toString();
-      if(tick >= 25) { 
+      //if(tick >= 25) { 
     	escritura_final = auxString[tick%25];
     	auxString[tick%25] = miString;
     	
@@ -317,16 +310,16 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
         else {
         	escritura_final = sb.append("no_danger\n").toString();  
         }
-    	try {
+    	/*try {
 			fichero.write(escritura_final);
 			fichero.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-    }
+		}*/
+    /*}
 	else {
 		auxString[tick] = miString;
-	}
+	}*/
     tick++;
 } 
     
@@ -339,31 +332,26 @@ public class Drogoz_Refuerzo extends BasicMarioAIAgent implements Agent {
 	        if( foso == 1 )	{
 	        	estado[0] = 0;
 	        	 accion = ql.obtenerMejorAccion(estado);
-	        	 System.out.println("Foso :"+tick);
 	     	}
 	        //Enemigo
 	        else if( enemys == 1 ) {
 	        	estado[0] = 1;
 	        	 accion = ql.obtenerMejorAccion(estado);
-	        	 System.out.println("Enemy :"+tick);
 	      	}
 	        //Obstaculo
 	        else if( obstaculo == 1 ) {
 	        	estado[0] = 2;
 	        	 accion = ql.obtenerMejorAccion(estado);
-	        	 System.out.println("Obstaculo :"+tick);
 	      	}
 	        // Moneda
 	        else if( moneda == 1 ) {
 	        	 estado[0] = 3;
 	        	 accion = ql.obtenerMejorAccion(estado);
-	        	 System.out.println("Moneda :"+tick);
 	        }
 	        // no_danger 
 	        else {
 	        	estado[0] = 4;
 	        	 accion = ql.obtenerMejorAccion(estado);
-	        	 System.out.println("No_danger :"+tick);
 	        }
 
 	 // La accion es un array de booleanos de dimension 6
